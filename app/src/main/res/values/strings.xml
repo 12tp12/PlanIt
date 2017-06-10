@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PlanIt</string>
+    <string name="login_welcome">Welcome to PlanIt.\n Please Login.</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+</resources>

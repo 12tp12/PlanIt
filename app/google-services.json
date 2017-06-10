@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "901713700031",
+    "firebase_url": "https://planit-d9dec.firebaseio.com",
+    "project_id": "planit-d9dec",
+    "storage_bucket": "planit-d9dec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901713700031:android:ef4ace845ef8c83c",
+        "android_client_info": {
+          "package_name": "com.planit.planit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901713700031-upknldksalviui0jgloahpl2671f5glk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.planit.planit",
+            "certificate_hash": "cb9e9a1de96fe43a4ebfe35e6a22c56fc27e97f2"
+          }
+        },
+        {
+          "client_id": "901713700031-2h82tbnhgt6f52akl0au4407der2dc97.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRiLx6SI4WAvooIaydXrns8sidhs1IZ7c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901713700031-2h82tbnhgt6f52akl0au4407der2dc97.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
