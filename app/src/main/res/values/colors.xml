@@ -7,4 +7,5 @@
     <color name="colorAccent">#40c4ff</color>
     <color name="textOnP">#ffebee</color>
     <color name="textOnS">#0091ee</color>
+    <color name="background">#FAFAFA</color>
 </resources>

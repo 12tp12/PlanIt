@@ -6,6 +6,21 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <style name="defaultButton" parent="Base.Widget.AppCompat.Button">
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:textColor">@color/textOnP</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <style name="defaultText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="defaultPicker" parent="@android:style/Widget.DeviceDefault.Light.Spinner">
+        <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
     </style>
 
 </resources>

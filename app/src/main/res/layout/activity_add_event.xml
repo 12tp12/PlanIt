@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/add_event_toolbar"/>
+
+    <ViewFlipper
+        android:id="@+id/add_event_flipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/add_event_toolbar">
+
+        <!-- Part one of add event -->
+        <RelativeLayout
+            android:id="@+id/add_event_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/event_name_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/event_name_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name"
+                    android:inputType="text"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:id="@+id/date_seperator"
+                android:layout_width="match_parent"
+                android:layout_below="@id/event_name_container"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                style="@style/defaultPicker"
+                android:id="@+id/event_date_picker"
+                android:layout_below="@id/date_seperator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/date"/>
+            <TextView
+                style="@style/defaultPicker"
+                android:id="@+id/event_time_picker"
+                android:layout_below="@id/date_seperator"
+                android:layout_alignEnd="@id/event_name_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hour_sample"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_below="@id/event_time_picker"
+                android:id="@+id/event_location_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/event_location_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/location"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:id="@+id/about_seperator"
+                android:layout_width="match_parent"
+                android:layout_below="@id/event_location_container"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_below="@id/about_seperator"
+                android:id="@+id/event_about_continer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/event_about_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/about"
+                    android:lines="5"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/next_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/event_about_continer"
+                android:layout_alignEnd="@id/about_seperator"
+                android:src="@android:drawable/ic_media_next"/>
+
+        </RelativeLayout>
+    </ViewFlipper>
+
+</RelativeLayout>

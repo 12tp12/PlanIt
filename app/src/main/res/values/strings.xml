@@ -6,4 +6,16 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="app_logo">App Logo</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="re_password">Repeat Password</string>
+    <string name="log_out">Log out</string>
+    <string name="signout">Sign Out</string>
+    <string name="name">Name</string>
+    <string name="location">Location</string>
+    <string name="about">About</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="hour_sample">20:00</string>
+    <string name="date">13/05/1996</string>
 </resources>

@@ -1,11 +1,17 @@
 package com.planit.planit;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -29,11 +35,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         fAuth = FirebaseAuth.getInstance();
         fUser = fAuth.getCurrentUser();
 
-        // initialize user input and buttons
+        // initialize handles
         email = (EditText)findViewById(R.id.email_input);
         password = (EditText) findViewById(R.id.password_input);
         loginButton = (AppCompatButton) findViewById(R.id.login_button);
-        registerButton = (AppCompatButton) findViewById(R.id.register_button);
+        registerButton = (AppCompatButton) findViewById(R.id.login_register_button);
 
         loginButton.setOnClickListener(this);
         registerButton.setOnClickListener(this);
@@ -41,13 +47,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void signIn()
     {
-        if(!validateForm())
+        if(!validate())
         {
             return;
         }
+
+        fAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful())
+                        {
+                            fUser = fAuth.getCurrentUser();
+                            String welcomeText = "Welcome " + fUser.getDisplayName();
+                            Toast.makeText(getApplicationContext(), welcomeText, Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
-    public boolean validateForm()
+    public boolean validate()
     {
         String emailText = email.getText().toString();
         String passText = password.getText().toString();
@@ -59,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         if(passText.isEmpty())
         {
-            password.setError("Email cannot be empty.");
+            password.setError("Password cannot be empty.");
             return false;
         }
 
@@ -69,6 +92,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void register()
     {
 
+        Intent registerIntent = new Intent(this, RegisterActivity.class);
+        startActivity(registerIntent);
     }
 
     @Override
@@ -79,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.login_button:
                 signIn();
                 break;
-            case R.id.register_button:
+            case R.id.login_register_button:
                 register();
                 break;
         }
