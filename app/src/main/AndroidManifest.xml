@@ -33,6 +33,7 @@
             android:excludeFromRecents="true"
             android:noHistory="true" />
         <activity android:name=".RegisterActivity" />
+        <activity android:name=".PlanItActivity" />
         <activity android:name=".AddEvent" />
         <activity android:name=".EventActivity"/>
         <activity android:name=".InviteActivity"/>

@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#0094cc</color>
     <color name="colorPrimaryLight">#e0f7fa</color>
     <color name="colorSecondary">#e0f7fa</color>
+    <color name="colorFood1">#A9CCE3</color>
+    <color name="colorFood2">#D4E6F1</color>
     <color name="colorAccent">#40c4ff</color>
     <color name="textOnP">#ffebee</color>
     <color name="textOnS">#0091ee</color>

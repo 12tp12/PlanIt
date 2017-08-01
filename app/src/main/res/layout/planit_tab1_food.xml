@@ -8,11 +8,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.planit.planit.PlanItActivity$PlaceholderFragment">
 
-    <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tab1 contacts text"/>
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_below="@id/appbar"
+        android:paddingTop="4dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginTop="2dp"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/home_add_event"
