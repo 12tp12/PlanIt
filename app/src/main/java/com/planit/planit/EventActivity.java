@@ -31,7 +31,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         setSupportActionBar((Toolbar) findViewById(R.id.event_activity_toolbar));
 //
         //need to change to the relevent event
-        getSupportActionBar().setTitle("Event");
+        getSupportActionBar().setTitle(null);
         fAuth = FirebaseAuth.getInstance();
         if(fAuth.getCurrentUser() == null)
         {

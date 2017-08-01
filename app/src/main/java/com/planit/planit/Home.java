@@ -35,8 +35,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_home);
 
         setSupportActionBar((Toolbar) findViewById(R.id.home_toolbar));
-        getSupportActionBar().setTitle("Home");
+        getSupportActionBar().setTitle(null);
 
+        Intent login2Intent = new Intent(this, PlanItActivity.class);
+        startActivity(login2Intent);
+        finish();
 
         fAuth = FirebaseAuth.getInstance();
         if(fAuth.getCurrentUser() == null)

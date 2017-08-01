@@ -21,4 +21,7 @@
     <string name="firebase_cloud_messaging_token">1234355</string>
     <string name="user_id">0</string>
     <string name="date">DD/MM/YY</string>
+    <string name="title_activity_plan_it">PlanItActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

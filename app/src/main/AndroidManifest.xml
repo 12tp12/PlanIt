@@ -32,7 +32,11 @@
             android:noHistory="true" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".AddEvent" />
-        <activity android:name=".EventActivity"></activity>
+        <activity android:name=".EventActivity" />
+        <activity
+            android:name=".PlanItActivity"
+            android:label="@string/title_activity_plan_it"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
