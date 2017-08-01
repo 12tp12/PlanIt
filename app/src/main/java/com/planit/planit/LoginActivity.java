@@ -61,6 +61,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             fUser = fAuth.getCurrentUser();
                             String welcomeText = "Welcome " + fUser.getDisplayName();
                             Toast.makeText(getApplicationContext(), welcomeText, Toast.LENGTH_SHORT).show();
+                            Intent homeIntent = new Intent(getApplicationContext(), Home.class);
+                            startActivity(homeIntent);
                         }
                         else
                         {

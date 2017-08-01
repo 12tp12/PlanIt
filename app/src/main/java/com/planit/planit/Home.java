@@ -8,13 +8,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.planit.planit.FireBaseService.MyFirebaseInstanceIDService.MyFirebaseInstanceIDService;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
     FirebaseAuth fAuth;
@@ -30,6 +36,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
         setSupportActionBar((Toolbar) findViewById(R.id.home_toolbar));
         getSupportActionBar().setTitle("Home");
+
 
         fAuth = FirebaseAuth.getInstance();
         if(fAuth.getCurrentUser() == null)
@@ -64,13 +71,26 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
         fUser = fAuth.getCurrentUser();
+//        fUser.getToken(true)
+//                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+//                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+//                        if (task.isSuccessful()) {
+//                            String idToken = task.getResult().getToken();
+//                            // Todo: Update firebase
+//                            FirebaseDatabase.getInstance().getReference("users").child(fUser.getEmail()).child("UserToken").setValue(idToken);
+//                        }
+//                    }
+//                });
         if(fUser == null)
         {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
             finish();
         }
+
+
         TextView test = (TextView) findViewById(R.id.test);
+
         test.setText("Welcome " + fUser.getDisplayName());
     }
 

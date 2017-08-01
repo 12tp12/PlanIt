@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -116,17 +117,31 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        DBUsers.child(Utilities.encodeKey(email.getText().toString())).
-                                                setValue(new User(firstName.getText().toString(),
-                                                        lastName.getText().toString(),
-                                                        null,
-                                                        phoneNumber.getText().toString()));
+                                        fUser.getToken(true)
+                                                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                                        if (task.isSuccessful()) {
+                                                            String idToken = task.getResult().getToken();
+                                                            User user = new User(firstName.getText().toString(),
+                                                                    lastName.getText().toString(),
+                                                                    null,
+                                                                    phoneNumber.getText().toString(),
+                                                                    idToken);
+                                                            DBUsers.child(Utilities.encodeKey(email.getText().toString())).
+                                                                    setValue(user);
+                                                            // ...
+                                                        } else {
+                                                            // Handle error -> task.getException();
+                                                        }
+                                                    }
+                                                });
+
                                     } else {
                                         Log.d(TAG, "User profile update failed");
                                     }
                                 }
                             });
-                            Intent homeIntent = new Intent(RegisterActivity.this, Home.class);
+                            Intent homeIntent = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(homeIntent);
                             finish();
                         }

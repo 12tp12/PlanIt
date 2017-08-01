@@ -5,6 +5,7 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
+    <string name="AddEventButtonStr">Add</string>
     <string name="dont_have_account">Don\'t have an account?</string>
     <string name="app_logo">App Logo</string>
     <string name="first_name">First Name</string>
@@ -16,6 +17,8 @@
     <string name="location">Location</string>
     <string name="about">About</string>
     <string name="phone_number">Phone Number</string>
-    <string name="hour_sample">20:00</string>
-    <string name="date">13/05/1996</string>
+    <string name="hour_sample">HH:MM</string>
+    <string name="firebase_cloud_messaging_token">1234355</string>
+    <string name="user_id">0</string>
+    <string name="date">DD/MM/YY</string>
 </resources>

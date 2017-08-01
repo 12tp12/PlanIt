@@ -1,10 +1,14 @@
 package com.planit.planit;
 
+//region android_base_imports
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -12,16 +16,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ViewFlipper;
-
-import java.text.DateFormat;
+//endregion
+//region firebase_imports
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.planit.planit.utils.Event;
+//endregion
+//region java_imports
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-/**
- * Created by HP on 29-Jun-17.
- */
+import java.util.HashMap;
+import java.util.Map;
+//endregion
 
 public class AddEvent extends AppCompatActivity implements View.OnClickListener{
+
+    //region Data Members
     ViewFlipper viewFlipper;
 
     // edit texts
@@ -37,10 +49,52 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
 
+    //endregion
+
+    //region FireBase
+    private DatabaseReference mDatabase;
+    FirebaseAuth fAuth;
+    FirebaseUser fUser;
+    //endregion
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
+
+        //region firebase
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        fAuth = FirebaseAuth.getInstance();
+        if(fAuth.getCurrentUser() == null)
+        {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+        }
+
+        fAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() == null)
+                {
+                    Intent loginIntent = new Intent(AddEvent.this, LoginActivity.class);
+                    startActivity(loginIntent);
+                    finish();
+                }
+            }
+        });
+
+        fUser = fAuth.getCurrentUser();
+        if(fUser == null)
+        {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+        }
+        //endregion
+
+        setSupportActionBar((Toolbar) findViewById(R.id.add_event_toolbar));
+        getSupportActionBar().setTitle("Add New Event");
 
         viewFlipper = (ViewFlipper) findViewById(R.id.add_event_flipper);
         viewFlipper.showNext();
@@ -62,8 +116,9 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Log.i("PICKER CHECK", "date is: " + new SimpleDateFormat("dd/MM/yyyy"));
-                eventName.setText("hi");
+                Log.i("PICKER CHECK", "Date is: " + new SimpleDateFormat("dd/MM/yyyy"));
+//                eventName.setText("hi");
+                eventDate.setText(dayOfMonth + "/" + month + "/" + year);
                 datePickerDialog.onDateChanged(view, year, month, dayOfMonth);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
@@ -76,6 +131,79 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
     }
 
+    public boolean validate(){
+        String eventNameStr = eventName.getText().toString();
+        String eventLocationStr = eventLocation.getText().toString();
+        String eventAboutStr = eventAbout.getText().toString();
+        String eventDateStr = eventDate.getText().toString();
+        String eventTimeStr = eventTime.getText().toString();
+
+        if (eventDateStr.isEmpty())
+        {
+            eventDate.setError("Event date can't be empty.");
+            return false;
+        }
+        if (eventTimeStr.isEmpty())
+        {
+            eventTime.setError("Event time can't be empty.");
+            return false;
+        }
+        if (eventNameStr.isEmpty())
+        {
+            eventName.setError("Event name can't be empty.");
+            return false;
+        }
+        if (eventLocationStr.isEmpty())
+        {
+            eventLocation.setError("Event location can't be empty.");
+            return false;
+        }
+        if (eventAboutStr.isEmpty())
+        {
+            eventAbout.setError("About can't be empty.");
+            return false;
+        }
+        return true;
+
+    }
+
+    public void AddEvent(){
+        if(!validate())
+        {
+            return;
+        }
+
+        String eventNameStr = eventName.getText().toString();
+        String eventLocationStr = eventLocation.getText().toString();
+        String eventAboutStr = eventAbout.getText().toString();
+        String eventDateStr = eventDate.getText().toString();
+        String eventTimeStr = eventTime.getText().toString();
+
+        writeNewEvent(eventNameStr, eventDateStr, eventTimeStr, eventLocationStr, eventAboutStr);
+
+        Intent homeIntent = new Intent(AddEvent.this, Home.class);
+        startActivity(homeIntent);
+        finish();
+        //
+    }
+
+    private void writeNewEvent(String name, String date, String time, String location, String about){
+
+        String key = mDatabase.child("events").push().getKey();
+        String userCreator = fUser.getEmail();
+        Event event = new Event(name, date, time, location, about, userCreator);
+        Map<String, Object> postValues = event.toMapBaseEvent();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        //puts the full event in events root in firebase
+        childUpdates.put("/events/" + key, postValues);
+        mDatabase.updateChildren(childUpdates);
+
+        //puts new entry in events of this user
+        DatabaseReference f = FirebaseDatabase.getInstance().getReference("users").child(userCreator).child("events").push();
+        f.setValue(key);
+    }
+
     @Override
     public void onClick(View view)
     {
@@ -86,6 +214,9 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
                 break;
             case R.id.event_time_picker:
                 timePickerDialog.show();
+                break;
+            case R.id.add_event_button:
+                AddEvent();
                 break;
         }
     }

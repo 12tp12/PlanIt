@@ -1,4 +1,7 @@
 package com.planit.planit.utils;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.GetTokenResult;
+
 import java.util.ArrayList;
 
 /**
@@ -13,8 +16,9 @@ public class User {
     private String phoneNumber;
     private ArrayList<Event> invited;
     private ArrayList<Event> hosted;
+    private String token;
 
-    public User(String firstName, String lastName, String email, String phoneNumber)
+    public User(String firstName, String lastName, String email, String phoneNumber, String token)
     {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,6 +26,11 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.invited = new ArrayList<Event>();
         this.hosted = new ArrayList<Event>();
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public String getFirstName() {

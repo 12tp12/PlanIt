@@ -8,6 +8,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service android:name=".FireBaseService.MyFirebaseInstanceIDService.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".FireBaseService.MyFirebaseInstanceIDService.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity android:name=".Home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,9 +29,10 @@
         <activity
             android:name=".LoginActivity"
             android:excludeFromRecents="true"
-            android:noHistory="true"/>
-        <activity android:name=".RegisterActivity"/>
-        <activity android:name=".AddEvent"/>
+            android:noHistory="true" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".AddEvent" />
+        <activity android:name=".EventActivity"></activity>
     </application>
 
 </manifest>
