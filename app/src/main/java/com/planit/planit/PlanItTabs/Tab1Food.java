@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import com.planit.planit.R;
 
 public class Tab1Food extends Fragment {
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
