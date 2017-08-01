@@ -97,7 +97,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
         //endregion
 
         setSupportActionBar((Toolbar) findViewById(R.id.add_event_toolbar));
-        getSupportActionBar().setTitle("Add New Event");
+        getSupportActionBar().setTitle(null);
 
         viewFlipper = (ViewFlipper) findViewById(R.id.add_event_flipper);
         viewFlipper.showNext();
