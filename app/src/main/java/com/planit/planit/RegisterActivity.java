@@ -35,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     FirebaseAuth fAuth;
     FirebaseUser fUser;
     DatabaseReference DBUsers;
-    DatabaseReference DBUsersToEvents;
+    DatabaseReference DBEmailToPhones;
 
     AppCompatButton registerButton;
 
@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
         DBUsers = FirebaseDatabase.getInstance().getReference("users");
-        DBUsersToEvents = FirebaseDatabase.getInstance().getReference("relations/users-to-events");
+        DBEmailToPhones = FirebaseDatabase.getInstance().getReference("emailsToPhones");
 
         // initialize handles
         firstName = (EditText)findViewById(R.id.firstname_input);
@@ -124,11 +124,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                                             String idToken = task.getResult().getToken();
                                                             User user = new User(firstName.getText().toString(),
                                                                     lastName.getText().toString(),
+                                                                    Utilities.encodeKey(email.getText().toString()),
                                                                     null,
-                                                                    phoneNumber.getText().toString(),
                                                                     idToken);
-                                                            DBUsers.child(Utilities.encodeKey(email.getText().toString())).
+                                                            DBUsers.child(phoneNumber.getText().toString()).
                                                                     setValue(user);
+                                                            DBEmailToPhones.child(Utilities.encodeKey(email.getText().toString())).
+                                                                    setValue(phoneNumber.getText().toString());
                                                             // ...
                                                         } else {
                                                             // Handle error -> task.getException();

@@ -24,7 +24,7 @@ public class Event {
     private Map<String, Item> foodAndDrinks;
     private Map<String, Item> equipment;
     private Map<String,Item> playlist;
-    private Map<String, User> invited;
+    private ArrayList<String> invited;
     private ArrayList<String> hosted;
 
     public Event(){
@@ -42,7 +42,7 @@ public class Event {
         this.foodAndDrinks = new HashMap<>();
         this.equipment = new HashMap<>();
         this.playlist = new HashMap<>();
-        this.invited = new HashMap<>();
+        this.invited = new ArrayList<>();
         this.hosted = new ArrayList<>();
         this.hosted.add(userCreator);
     }

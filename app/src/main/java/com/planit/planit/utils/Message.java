@@ -7,25 +7,25 @@ package com.planit.planit.utils;
 public class Message {
 
 
-    private User user;
+    private String phone;
     private String data;
     private String timestamp;
 
     public Message(){
 
     }
-    public Message(User user, String data, String timestamp){
-        this.user = user;
+    public Message(String phone, String data, String timestamp){
+        this.phone = phone;
         this.data = data;
         this.timestamp = timestamp;
     }
 
-    public User getUser() {
-        return user;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getData() {

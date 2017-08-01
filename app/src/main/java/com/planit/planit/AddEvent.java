@@ -20,8 +20,11 @@ import android.widget.ViewFlipper;
 //region firebase_imports
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.planit.planit.utils.Event;
 //endregion
 //region java_imports
@@ -187,21 +190,35 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
         //
     }
 
-    private void writeNewEvent(String name, String date, String time, String location, String about){
+    private void writeNewEvent(final String name, final String date, final String time,
+                               final String location, final String about){
 
-        String key = mDatabase.child("events").push().getKey();
-        String userCreator = fUser.getEmail();
-        Event event = new Event(name, date, time, location, about, userCreator);
-        Map<String, Object> postValues = event.toMapBaseEvent();
+        DatabaseReference userReference = mDatabase.child("emailsToPhones").child(fUser.getEmail());
+        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String key = mDatabase.child("events").push().getKey();
+                String host = dataSnapshot.getKey();
+                Event event = new Event(name, date, time, location, about, host);
+                Map<String, Object> postValues = event.toMapBaseEvent();
 
-        Map<String, Object> childUpdates = new HashMap<>();
-        //puts the full event in events root in firebase
-        childUpdates.put("/events/" + key, postValues);
-        mDatabase.updateChildren(childUpdates);
+                Map<String, Object> childUpdates = new HashMap<>();
+                //puts the full event in events root in firebase
+                childUpdates.put("/events/" + key, postValues);
+                mDatabase.updateChildren(childUpdates);
 
-        //puts new entry in events of this user
-        DatabaseReference f = FirebaseDatabase.getInstance().getReference("users").child(userCreator).child("events").push();
-        f.setValue(key);
+                //puts new entry in events of this user
+                DatabaseReference f = FirebaseDatabase.getInstance().getReference("users").
+                        child("hosted").push();
+                f.setValue(key);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override

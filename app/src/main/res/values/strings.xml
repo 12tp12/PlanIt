@@ -21,4 +21,6 @@
     <string name="firebase_cloud_messaging_token">1234355</string>
     <string name="user_id">0</string>
     <string name="date">DD/MM/YY</string>
+    <string name="search">Search</string>
+    <string name="phone_number_ex">0527018153</string>
 </resources>

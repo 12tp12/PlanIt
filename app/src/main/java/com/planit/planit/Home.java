@@ -108,7 +108,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 signOut();
                 break;
             case R.id.home_add_event:
-                Intent addEventIntent = new Intent(this, AddEvent.class);
+                Intent addEventIntent = new Intent(this, InviteActivity.class);
                 startActivity(addEventIntent);
                 break;
         }
