@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.planit.planit.EventActivity">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/event_activity_toolbar"
+        />
+
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/event_activity_signout"
+        style="@style/defaultButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="8dp"
+        android:text="@string/signout" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/event_activity_add_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_input_add"
+        android:layout_toStartOf="@id/home_signout"
+        android:tint="@color/textOnP"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_alignParentBottom="true"
+        android:elevation="16dp"/>
+</RelativeLayout>
