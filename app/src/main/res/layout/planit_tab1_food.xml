@@ -6,7 +6,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.planit.planit.PlanItActivity$PlaceholderFragment">
+    tools:context="com.planit.planit.PlanItActivity$PlaceholderFragment"
+    android:layoutDirection="ltr"
+    >
 
     <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,8 +18,6 @@
         android:layout_gravity="center"
         android:layout_below="@id/appbar"
         android:paddingTop="4dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="2dp"
         android:layout_marginTop="2dp"/>
 
     <android.support.design.widget.FloatingActionButton

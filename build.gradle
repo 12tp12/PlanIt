@@ -15,6 +15,10 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        // Required for 'com.firebaseui:firebase-ui:1.1.1'
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
 }
 
