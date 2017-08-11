@@ -1,7 +1,7 @@
 package com.planit.planit.utils;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.Exclude;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +15,8 @@ import static com.planit.planit.R.string.location;
 
 public class Event {
 
+    @Exclude
+    private String key;
     private String name;
     private String date;
     private String time;
@@ -23,9 +25,9 @@ public class Event {
     private Map<String, Message> chat;
     private Map<String, Item> foodAndDrinks;
     private Map<String, Item> equipment;
-    private Map<String,Item> playlist;
-    private ArrayList<String> invited;
-    private ArrayList<String> hosted;
+    private Map<String, Item> playlist;
+    private HashMap<String, Boolean> invited;
+    private HashMap<String, Boolean> hosted;
 
     public Event(){
     // Default constructor required for calls to DataSnapshot.getValue(Post.class)
@@ -42,25 +44,92 @@ public class Event {
         this.foodAndDrinks = new HashMap<>();
         this.equipment = new HashMap<>();
         this.playlist = new HashMap<>();
-        this.invited = new ArrayList<>();
-        this.hosted = new ArrayList<>();
-        this.hosted.add(userCreator);
+        this.invited = new HashMap<>();
+        this.hosted = new HashMap<>();
+        this.hosted.put(userCreator, true);
     }
 
-    public Map<String, Object> toMapBaseEvent() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("EventName", this.name);
-        result.put("Date", this.date);
-        result.put("Time", this.time);
-        result.put("Location", this.location);
-        result.put("About", this.about);
+    public String getKey() {
+        return this.key;
+    }
 
-        result.put("Chat", this.chat);
-        result.put("FoodAndDrinks", this.foodAndDrinks);
-        result.put("Equipment", this.equipment);
-        result.put("Playlist", this.playlist);
-        result.put("Invited", this.invited);
-        result.put("Hosted", this.hosted);
+    public void setKey(String newKey) { this.key = newKey; }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public Map<String, Message> getChat() {
+        return chat;
+    }
+
+    public Map<String, Item> getFoodAndDrinks() {
+        return foodAndDrinks;
+    }
+
+    public Map<String, Item> getEquipment() {
+        return equipment;
+    }
+
+    public Map<String, Item> getPlaylist() {
+        return playlist;
+    }
+
+    public HashMap<String, Boolean> getInvited() {
+        return invited;
+    }
+
+    public void setInvited(HashMap<String, Boolean> newInvited)
+    {
+        this.invited = newInvited;
+    }
+
+    public HashMap<String, Boolean> getHosted() {
+        return hosted;
+    }
+
+    public void setHosted(HashMap<String, Boolean> newHosted)
+    {
+        this.hosted = newHosted;
+    }
+
+    public Map<String, Object> toMapBaseEventInfoTable() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name", this.name);
+        result.put("date", this.date);
+        result.put("time", this.time);
+        result.put("location", this.location);
+        result.put("about", this.about);
+
+        result.put("chat", this.chat);
+        result.put("foodAndDrinks", this.foodAndDrinks);
+        result.put("equipment", this.equipment);
+        result.put("playlist", this.playlist);
+
+        return result;
+    }
+
+    public Map<String, Object> toMapBaseEventUsers() {
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("invited", this.invited);
+        result.put("hosted", this.hosted);
 
         return result;
     }
