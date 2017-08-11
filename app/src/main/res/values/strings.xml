@@ -23,4 +23,15 @@
     <string name="date">DD/MM/YY</string>
     <string name="search">Search</string>
     <string name="phone_number_ex">0527018153</string>
+    <string name="alphabetENG">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="alphabetHEB">אבגדהוזחטיכלמנסעפצקרשת</string>
+    <string name="time">HH:mm</string>
+    <string name="home">Home</string>
+    <string name="eventName">Event Name</string>
+    <string name="eventLocation">Yehud</string>
+    <string name="eventDate">2.6.2017</string>
+    <string name="eventHour">21:00</string>
+    <string name="people">People</string>
+    <string name="hosted_events">Hosted</string>
+    <string name="invited_events">Invited</string>
 </resources>
