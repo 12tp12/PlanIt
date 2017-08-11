@@ -6,55 +6,173 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.planit.planit.EventActivity">
 
-    <!--<include layout="@layout/toolbar"-->
-        <!--android:id="@+id/event_activity_toolbar"-->
-        <!--/>-->
     <android.support.v7.widget.Toolbar
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:id="@+id/event_activity_toolbar"
         android:background="@color/colorPrimary"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_alignParentTop="true"
         android:elevation="4dp"
         android:textStyle="bold"
+        app:navigationIcon="?attr/homeAsUpIndicator"
         >
         <TextView
+            android:id="@+id/event_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
             android:textColor="@android:color/white"
-            android:text="Event"
+            android:text="@string/eventName"
             android:textSize="24sp"
-            android:paddingLeft="12dp"
-            android:textStyle="bold"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_alignParentTop="true"
-            android:elevation="4dp"/>
+            android:textStyle="bold"/>
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/event_activity_signout"
-        style="@style/defaultButton"
+    <android.support.v7.widget.CardView
+        android:id="@+id/info_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_activity_toolbar">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+            <TextView
+                android:id="@+id/info_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/eventLocation"
+                android:textSize="24sp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"/>
+            <TextView
+                android:id="@+id/info_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/eventDate"
+                android:textSize="18sp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="4dp"/>
+            <TextView
+                android:id="@+id/info_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/eventHour"
+                android:textSize="18sp"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/info_date"
+                android:layout_marginTop="4dp"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v4.widget.Space
+        android:id="@+id/info_spacer"
+        android:layout_below="@id/info_card"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"/>
+    <android.support.v7.widget.CardView
+        android:id="@+id/about_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info_spacer">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+            <TextView
+                android:id="@+id/about_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/about"
+                android:textSize="24sp"/>
+            <TextView
+                android:id="@+id/about_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="5"
+                android:maxLines="7"
+                android:scrollbars="vertical"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v4.widget.Space
+        android:id="@+id/about_spacer"
+        android:layout_below="@id/about_card"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"/>
+    <android.support.v7.widget.CardView
+        android:id="@+id/bottom_people_planit_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="8dp"
-        android:text="@string/signout" />
+        android:layout_below="@id/about_spacer">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.CardView
+                android:id="@+id/people_card"
+                android:layout_width="0dp"
+                android:layout_weight="49.95"
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+                    <TextView
+                        android:id="@+id/planit_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/people"
+                        android:textSize="24sp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+            <android.support.v4.widget.Space
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"/>
+            <android.support.v7.widget.CardView
+                android:id="@+id/planit_card"
+                android:layout_width="0dp"
+                android:layout_weight="49.95"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textSize="24sp"
+                        android:textColor="@color/cardview_dark_background"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_media_next"
+                        android:layout_alignParentEnd="true"
+                        android:background="@color/colorPrimary"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/event_activity_add_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_input_add"
-        android:layout_toStartOf="@id/event_activity_signout"
-        android:tint="@color/textOnP"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="8dp"
-        android:layout_alignParentBottom="true"
-        android:elevation="16dp"/>
 </RelativeLayout>

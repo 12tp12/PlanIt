@@ -25,17 +25,11 @@ import com.planit.planit.utils.Utilities;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private final String TAG = "RegisterActivity";
-    EditText firstName;
-    EditText lastName;
-    EditText email;
-    EditText password;
-    EditText repeatPassword;
-    EditText phoneNumber;
+    EditText firstName, lastName, email, password, repeatPassword, phoneNumber;
 
     FirebaseAuth fAuth;
     FirebaseUser fUser;
-    DatabaseReference DBUsers;
-    DatabaseReference DBEmailToPhones;
+    DatabaseReference DBUsers, DBEmailToPhones;
 
     AppCompatButton registerButton;
 
@@ -128,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                                                     null,
                                                                     idToken);
                                                             DBUsers.child(phoneNumber.getText().toString()).
-                                                                    setValue(user);
+                                                                    setValue(user.toMapUser());
                                                             DBEmailToPhones.child(Utilities.encodeKey(email.getText().toString())).
                                                                     setValue(phoneNumber.getText().toString());
                                                             // ...

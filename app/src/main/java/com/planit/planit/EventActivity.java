@@ -8,20 +8,29 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.planit.planit.utils.Event;
+import com.planit.planit.utils.User;
 
 public class EventActivity extends AppCompatActivity implements View.OnClickListener{
 
     FirebaseAuth fAuth;
     FirebaseUser fUser;
+    User currentUser;
+    Event currentEvent;
     DatabaseReference fDatabase;
 
-    AppCompatButton logout;
-    FloatingActionButton addEvent;
+    TextView eventTitle; // title in toolbar
+    TextView eventLocation;
+    TextView eventDate;
+    TextView eventTime;
+    TextView eventAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +67,31 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             startActivity(loginIntent);
             finish();
         }
+
+        Bundle extras = getIntent().getExtras();
+
+        currentUser = new Gson().fromJson(extras.getString("user"), User.class);
+        currentEvent = new Gson().fromJson(extras.getString("event"), Event.class);
+
+        eventTitle = (TextView) findViewById(R.id.event_title);
+        eventLocation = (TextView) findViewById(R.id.info_location);
+        eventDate = (TextView) findViewById(R.id.info_date);
+        eventTime = (TextView) findViewById(R.id.info_hour);
+        eventAbout = (TextView) findViewById(R.id.about_text);
+
         fDatabase = FirebaseDatabase.getInstance().getReference();
+    }
 
-        logout = (AppCompatButton) findViewById(R.id.event_activity_signout);
-        addEvent = (FloatingActionButton) findViewById(R.id.event_activity_add_event);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        eventTitle.setText(currentEvent.getName());
+        eventLocation.setText(currentEvent.getLocation());
+        eventDate.setText(currentEvent.getDate());
+        eventTime.setText(currentEvent.getTime());
+        eventAbout.setText(currentEvent.getAbout());
 
-        logout.setOnClickListener(this);
-        addEvent.setOnClickListener(this);
+        //getPeople();
     }
 
     @Override

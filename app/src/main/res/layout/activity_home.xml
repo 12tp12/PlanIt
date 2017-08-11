@@ -10,12 +10,11 @@
         <!--android:id="@+id/home_toolbar"-->
         <!--/>-->
     <android.support.v7.widget.Toolbar
+        android:id="@+id/home_toolbar"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:id="@+id/home_toolbar"
         android:background="@color/colorPrimary"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_alignParentTop="true"
         android:elevation="4dp"
         android:textStyle="bold"
@@ -25,21 +24,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:textColor="@android:color/white"
-            android:text="Home"
+            android:text="@string/home"
             android:textSize="24sp"
-            android:paddingLeft="12dp"
             android:textStyle="bold"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_alignParentTop="true"
             android:elevation="4dp"/>
         </android.support.v7.widget.Toolbar>
 
-    <TextView
-        style="@style/defaultText"
-        android:id="@+id/test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/home_toolbar"/>
+    <FrameLayout
+        android:id="@+id/events_fragment_container"
+        android:layout_below="@id/home_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/home_signout"

@@ -5,9 +5,9 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -20,12 +20,12 @@ import android.widget.ViewFlipper;
 //region firebase_imports
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.planit.planit.utils.Event;
+import com.planit.planit.utils.FirebaseTables;
+import com.planit.planit.utils.User;
 //endregion
 //region java_imports
 import java.text.SimpleDateFormat;
@@ -51,6 +51,10 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
     // Dialogs
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
+
+    AppCompatButton addEventButton;
+
+    User currentUser;
 
     //endregion
 
@@ -99,6 +103,12 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
         setSupportActionBar((Toolbar) findViewById(R.id.add_event_toolbar));
         getSupportActionBar().setTitle(null);
 
+        Bundle extras = getIntent().getExtras();
+
+        currentUser = new Gson().fromJson(extras.getString("user"), User.class);
+
+        Log.d("user between intents", "current users is " + currentUser.getPhoneNumber());
+
         viewFlipper = (ViewFlipper) findViewById(R.id.add_event_flipper);
         viewFlipper.showNext();
 
@@ -120,8 +130,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Log.i("PICKER CHECK", "Date is: " + new SimpleDateFormat("dd/MM/yyyy"));
-//                eventName.setText("hi");
-                eventDate.setText(dayOfMonth + "/" + month + "/" + year);
+                eventDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                 datePickerDialog.onDateChanged(view, year, month, dayOfMonth);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
@@ -129,9 +138,13 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
         timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                eventTime.setText(hourOfDay + ":" + minute);
+                eventTime.setText((hourOfDay != 0 ? hourOfDay : hourOfDay + "0") + ":" +
+                        (minute != 0 ? minute : minute + "0"));
             }
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+
+        addEventButton = (AppCompatButton) findViewById(R.id.add_event_button);
+        addEventButton.setOnClickListener(this);
     }
 
     public boolean validate(){
@@ -184,41 +197,33 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
 
         writeNewEvent(eventNameStr, eventDateStr, eventTimeStr, eventLocationStr, eventAboutStr);
 
-        Intent homeIntent = new Intent(AddEvent.this, Home.class);
-        startActivity(homeIntent);
         finish();
         //
     }
 
     private void writeNewEvent(final String name, final String date, final String time,
                                final String location, final String about){
+        String eventKey = mDatabase.child("events").push().getKey();
+        Event event = new Event(name, date, time, location, about, currentUser.getPhoneNumber());
+        Map<String, Object> postValues = event.toMapBaseEventInfoTable();
 
-        DatabaseReference userReference = mDatabase.child("emailsToPhones").child(fUser.getEmail());
-        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String key = mDatabase.child("events").push().getKey();
-                String host = dataSnapshot.getKey();
-                Event event = new Event(name, date, time, location, about, host);
-                Map<String, Object> postValues = event.toMapBaseEvent();
+        Map<String, Object> childUpdates = new HashMap<>();
+        //puts the full event in events root in firebase
+        childUpdates.put(FirebaseTables.eventsInfoTable + "/" + eventKey, postValues);
+        mDatabase.updateChildren(childUpdates);
 
-                Map<String, Object> childUpdates = new HashMap<>();
-                //puts the full event in events root in firebase
-                childUpdates.put("/events/" + key, postValues);
-                mDatabase.updateChildren(childUpdates);
+        currentUser.addHostedEvent(eventKey);
+        //puts new entry in events of this user
+        childUpdates.clear();
+        childUpdates.put(FirebaseTables.usersToEvents + "/" + currentUser.getPhoneNumber() + "/hosted/" + eventKey
+                , true);
+        mDatabase.updateChildren(childUpdates);
 
-                //puts new entry in events of this user
-                DatabaseReference f = FirebaseDatabase.getInstance().getReference("users").
-                        child("hosted").push();
-                f.setValue(key);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+        // put entries in this event's invited/hosted
+        childUpdates.clear();
+        childUpdates.put(FirebaseTables.eventsToUsers + "/" + eventKey + "/hosted/" +
+                currentUser.getPhoneNumber(), true);
+        mDatabase.updateChildren(childUpdates);
     }
 
     @Override
