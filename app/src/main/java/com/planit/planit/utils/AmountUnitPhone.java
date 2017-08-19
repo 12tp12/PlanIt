@@ -5,56 +5,31 @@ package com.planit.planit.utils;
  */
 
 public class AmountUnitPhone {
-    private String Amount;
-    private String Unit;
-    private String Phone;
-    private String fullname;
+    private int amount;
+    private String fullName;
 
     public AmountUnitPhone() {
 
     }
 
-    public AmountUnitPhone(String Amount, String Unit, String Phone, String fullname) {
-        this.Amount = Amount;
-        this.Unit = Unit;
-        this.Phone = Phone;
-        this.fullname = fullname;
+    public AmountUnitPhone(int amount, String fullName) {
+        this.amount = amount;
+        this.fullName = fullName;
     }
 
-    public AmountUnitPhone(String Amount, String Unit, String Phone) {
-        this.Amount = Amount;
-        this.Unit = Unit;
-        this.Phone = Phone;
-    }
-    public String getAmount() {
-        return Amount;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setAmount(String amount) {
-        Amount = amount;
-    }
-
-    public String getUnit() {
-        return Unit;
-    }
-
-    public void setUnit(String unit) {
-        Unit = unit;
-    }
-
-    public String getPhone() {
-        return Phone;
-    }
-
-    public void setPhone(String phone) {
-        Phone = phone;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public String getFullname() {
-        return fullname;
+        return fullName;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullname(String fullName) {
+        this.fullName = fullName;
     }
 }

@@ -2,8 +2,7 @@ package com.planit.planit;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.support.v4.app.ListFragment;
-import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,13 +10,17 @@ import android.provider.ContactsContract;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.CursorAdapter;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,21 +29,35 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.planit.planit.utils.Event;
+import com.planit.planit.utils.FirebaseTables;
+import com.planit.planit.utils.User;
+import com.twitter.sdk.android.core.services.CollectionService;
+import com.twitter.sdk.android.tweetcomposer.internal.util.ObservableScrollView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 
 /**
  * Created by HP on 03-Aug-17.
  */
 
-public class InviteFragment extends ListFragment implements
-        AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>
+public class InviteFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>
 {
-    private ContactsAdapter mAdapter; // The main query adapter
+    private ContactsAdapter mAdapter;
+    private RecyclerView recyclerView;
+
     private DatabaseReference mDatabase;
 
     private String searchTerm;
+
+    User currentUser;
+    Event currentEvent;
 
     public InviteFragment() {}
 
@@ -48,26 +65,60 @@ public class InviteFragment extends ListFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = new ContactsAdapter(getActivity());
+        mAdapter = new ContactsAdapter();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.invite_list_layout, container, false);
+        View mView = inflater.inflate(R.layout.invite_list_layout, container, false);
+        recyclerView = (RecyclerView) mView.findViewById(R.id.contacts_recycler_view);
+
+        return mView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setListAdapter(mAdapter);
-        getListView().setOnItemClickListener(this);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    public void setData(User currentUser, Event currentEvent)
+    {
+        this.currentUser = currentUser;
+        this.currentEvent = currentEvent;
         getLoaderManager().initLoader(ContactsQuery.QUERY_ID, null, this);
+    }
+
+    public void invite()
+    {
+        HashMap<String, Object> invited = mAdapter.mSelectedInvited;
+        HashMap<String, Object> hosted = mAdapter.mSelectedHosts;
+
+        mDatabase.child(FirebaseTables.eventsToUsers + "/" + currentEvent.getKey() +
+                "/invited").updateChildren(invited);
+        mDatabase.child(FirebaseTables.eventsToUsers + "/" + currentEvent.getKey() +
+                "/hosted").updateChildren(hosted);
+
+        for (Map.Entry<String, Object> entry : invited.entrySet())
+        {
+            mDatabase.child(FirebaseTables.usersToEvents + "/" + entry.getKey() + "/invited/"
+                            + currentEvent.getKey()).setValue(true);
+        }
+        for (Map.Entry<String, Object> entry : hosted.entrySet())
+        {
+            mDatabase.child(FirebaseTables.usersToEvents + "/" + entry.getKey() + "/hosted/"
+                    + currentEvent.getKey()).setValue(true);
+        }
+        getActivity().finish();
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
         Uri contentUri = ContactsQuery.CONTENT_URI;
 
         if (searchTerm != null) {
@@ -82,34 +133,43 @@ public class InviteFragment extends ListFragment implements
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
+    public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
+        while (data.moveToNext())
+        {
+            final String name = data.getString(ContactsQuery.DISPLAY_NAME);
+            final String phone = validatePhone(data.getString(ContactsQuery.NUMBER));
+            ValueEventListener l = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists())
+                    {
+                        Log.d("DEBUG", "phone is " + dataSnapshot.getKey());
+                        if (dataSnapshot.getKey().equals(currentUser.getPhoneNumber()))
+                        {
+                            Log.d("DEBUG", "skipping user");
+                            // skip this user
+                            return;
+                        }
+                        mAdapter.addUser(new ContactUser(name, phone));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                        Log.d("check", "in ONCANCELLED");
+                }
+            };
+            mDatabase.child(FirebaseTables.users + "/" + phone).addListenerForSingleValueEvent(l);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        final ContactsAdapter adapter = (ContactsAdapter)parent.getAdapter();
-        ContactsAdapter.ViewHolder mView = (ContactsAdapter.ViewHolder) view.getTag();
-        if (!mView.name.isEnabled())
-        {
-            Toast.makeText(getContext(), "Oops! Seems like " + mView.name.getText().toString()
-            + " doesn't have PlanIt installed.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Log.d("CLICK DEBUG", "in onItemClick, phone is " + mView.phone.getText().toString());
-        final String phoneNumber = mView.phone.getText().toString();
-
-        adapter.setSelected(phoneNumber);
-        adapter.notifyDataSetChanged();
     }
 
     public void onQueryNotify(String newText)
     {
+        mAdapter.reset();
         if (newText == null || newText.isEmpty())
         {
             searchTerm = null;
@@ -124,120 +184,166 @@ public class InviteFragment extends ListFragment implements
                 ContactsQuery.QUERY_ID, null, InviteFragment.this);
     }
 
-    public HashMap<String, Boolean> getSelectedContacts()
+    public String validatePhone(String phone)
     {
-        return this.mAdapter.mSelected;
+        return phone.replace("+972", "05").replace(" ", "").replace("-","").trim();
     }
 
-    private class ContactsAdapter extends CursorAdapter
+    protected class ContactUser
     {
-        private LayoutInflater mInflater;
-        private HashMap<String, Boolean> mSelected;
+        protected String name;
+        protected String phone;
 
-        public ContactsAdapter(Context context)
+        protected ContactUser(String name, String phone)
         {
-            super(context, null, 0);
+            this.name = name;
+            this.phone = phone;
+        }
+    }
 
-            mInflater = LayoutInflater.from(context);
-            mSelected = new HashMap<>();
+    private class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder>
+    {
+        private class ContactsComparator implements Comparator<ContactUser>{
+            @Override
+            public int compare(ContactUser o1, ContactUser o2) {
+                return (o1.name.compareTo(o2.name));
+            }
+        }
+
+        private ArrayList<ContactUser> users;
+        private ArrayList<String> numbers;
+        private HashMap<String, Object> mSelectedInvited;
+        private HashMap<String, Object> mSelectedHosts;
+
+        public ContactsAdapter()
+        {
+            this.users = new ArrayList<>();
+            this.numbers = new ArrayList<>();
+            this.mSelectedInvited = new HashMap<>();
+            this.mSelectedHosts = new HashMap<>();
         }
 
         public void setSelected(String number)
         {
-            if (mSelected.containsKey(number))
+            if (mSelectedInvited.containsKey(number))
             {
-                mSelected.remove(number);
+                // swap from invited to hosted
+                mSelectedInvited.remove(number);
+                mSelectedHosts.put(number, true);
                 return;
             }
-            mSelected.put(number, true);
+            else if (mSelectedHosts.containsKey(number))
+            {
+                // remove from selected list
+                mSelectedHosts.remove(number);
+                return;
+            }
+            // else, this is the first click so add to invited
+            mSelectedInvited.put(number, true);
+        }
+
+        public void addUser(ContactUser user)
+        {
+            if (this.numbers.contains(user.phone))
+            {
+                Log.d("DEBUG", "user exists " + user.phone);
+                return;
+            }
+            Log.d("DEBUG", "Added user " + user.phone);
+            this.users.add(user);
+            this.numbers.add(user.phone);
+            Collections.sort(this.users, new ContactsComparator());
+            if (getItemCount() == 1)
+            {
+                notifyItemInserted(0);
+            }
+            else
+            {
+                notifyItemRangeChanged(0, getItemCount() - 1);
+            }
         }
 
         @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             // Inflates the list item layout.
             final CardView itemLayout =
-                    (CardView)mInflater.inflate(R.layout.contact_item, parent, false);
+                    (CardView)LayoutInflater.from(parent.getContext()).inflate(
+                            R.layout.contact_item, parent, false);
 
-            // Creates a new ViewHolder in which to store handles to each view resource. This
-            // allows bindView() to retrieve stored references instead of calling findViewById for
-            // each instance of the layout.
-            final ViewHolder holder = new ViewHolder();
-            holder.card = itemLayout;
-            holder.name = (TextView) itemLayout.findViewById(R.id.invite_name_text);
-            holder.phone = (TextView) itemLayout.findViewById(R.id.invite_phone_number);
+            final ViewHolder holder = new ViewHolder(itemLayout);
 
-            // Stores the resourceHolder instance in itemLayout. This makes resourceHolder
-            // available to bindView and other methods that receive a handle to the item view.
-            itemLayout.setTag(holder);
-
-            // Returns the item layout view
-            return itemLayout;
+            return holder;
         }
 
         @Override
-        public void bindView(View view, Context context, final Cursor cursor) {
-            final ViewHolder mView = (ViewHolder) view.getTag();
+        public void onBindViewHolder(ViewHolder view, int position) {
 
-            mView.name.setText(cursor.getString(ContactsQuery.DISPLAY_NAME));
-            String phone = validatePhone(cursor.getString(ContactsQuery.NUMBER));
-            if (phone.equals(""))
-            {
-                view.setVisibility(View.INVISIBLE);
-            }
-            else
-            {
-                mView.phone.setText(phone);
-            }
-            mDatabase.child("users").child(phone).addListenerForSingleValueEvent(
-                    new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (!dataSnapshot.exists())
-                            {
-                                Log.d("CLICK DEBUG", "phone " + dataSnapshot.getKey() +
-                                        " doesnt exist");
-                                // make text grayed out so user will know this contact
-                                // is unavailable
-                                mView.name.setEnabled(false);
-                                mView.phone.setEnabled(false);
-                                return;
-                            }
-                            mView.name.setEnabled(true);
-                            mView.phone.setEnabled(true);
-                        }
+            ContactUser currentUser = this.users.get(position);
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    }
-            );
-            if(mSelected.containsKey(phone) && mSelected.get(phone))
+            view.name.setText(currentUser.name);
+            view.phone.setText(currentUser.phone);
+            if(mSelectedHosts.containsKey(currentUser.phone))
             {
-                Log.d("CLICK DEBUG", "item is selected");
-                mView.card.setCardBackgroundColor(Color.GRAY);
+                view.invite.setVisibility(View.VISIBLE);
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.invite.
+                        getLayoutParams();
+                params.removeRule(RelativeLayout.ALIGN_PARENT_END);
+                view.hostInvite.setVisibility(View.VISIBLE);
+                return;
             }
-            else
+            else if(mSelectedInvited.containsKey(currentUser.phone))
             {
-                mView.card.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"));
+                view.invite.setVisibility(View.VISIBLE);
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.invite.
+                        getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_END);
+                view.hostInvite.setVisibility(View.GONE);
+                return;
             }
+            view.invite.setVisibility(View.GONE);
+            view.hostInvite.setVisibility(View.GONE);
         }
 
-        public String validatePhone(String phone)
+        @Override
+        public int getItemCount() {
+            return this.users.size();
+        }
+
+        public void reset()
         {
-            phone = phone.trim().replace("+972", "0").replace(" ","").replace("-","");
-            if(phone.length() != 10)
-            {
-                return "";
-            }
-            return phone;
+            Log.d("DEBUG", "cleared users");
+            int size = getItemCount();
+            this.users.clear();
+            this.numbers.clear();
+            notifyItemRangeRemoved(0, size);
         }
 
-        public class ViewHolder
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
         {
             CardView card;
             TextView name;
             TextView phone;
+            ImageView hostInvite;
+            ImageView invite;
+
+            public ViewHolder(CardView cView)
+            {
+                super(cView);
+                this.card = cView;
+                this.name = (TextView) cView.findViewById(R.id.invite_name_text);
+                this.phone = (TextView) cView.findViewById(R.id.invite_phone_number);
+                this.hostInvite = (ImageView) cView.findViewById(R.id.host_icon_inviting_list);
+                this.invite = (ImageView) cView.findViewById(R.id.icon_inviting_list);
+                this.card.setOnClickListener(this);
+                this.card.setClickable(true);
+            }
+
+            @Override
+            public void onClick(View v) {
+                Log.d("listener check", "clicked " + this.name.getText().toString());
+                setSelected(this.phone.getText().toString());
+                notifyItemChanged(getAdapterPosition());
+            }
         }
     }
     /**

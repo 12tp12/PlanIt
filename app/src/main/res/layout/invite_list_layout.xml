@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView
+<android.support.v7.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/contacts_list_view"
+    android:id="@+id/contacts_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="1dp"
     android:layout_below="@id/invite_search_input"
     tools:listitem="@layout/contact_item"/>

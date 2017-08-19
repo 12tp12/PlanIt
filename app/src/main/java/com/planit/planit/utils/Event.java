@@ -49,6 +49,40 @@ public class Event {
         this.hosted.put(userCreator, true);
     }
 
+    public void setEvent(Event other)
+    {
+        this.name = other.name;
+        this.location = other.location;
+        this.date = other.date;
+        this.time = other.time;
+        this.about = other.about;
+
+        this.chat = other.chat;;
+        this.foodAndDrinks = other.foodAndDrinks;
+        this.equipment = other.equipment;
+        this.playlist = other.playlist;
+        this.invited = other.invited;
+        this.hosted = other.hosted;
+    }
+
+    public void addHost(User user)
+    {
+        if (hosted == null)
+        {
+            this.hosted = new HashMap<>();
+        }
+        this.hosted.put(user.getPhoneNumber(), true);
+    }
+
+    public void addInvited(User user)
+    {
+        if (invited == null)
+        {
+            this.invited = new HashMap<>();
+        }
+        this.invited.put(user.getPhoneNumber(), true);
+    }
+
     public String getKey() {
         return this.key;
     }

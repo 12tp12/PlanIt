@@ -9,6 +9,7 @@ public class AmountUnit {
     public AmountUnit(){
 
     }
+
     public AmountUnit(String Amount, String Unit){
         this.Amount = Amount;
         this.Unit = Unit;

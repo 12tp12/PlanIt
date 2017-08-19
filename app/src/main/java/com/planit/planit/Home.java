@@ -39,6 +39,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
     final User currentUser = new User();
 
+    boolean initialRun = true;
+
     AppCompatButton logout;
     FloatingActionButton addEvent;
     @Override
@@ -48,10 +50,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
         setSupportActionBar((Toolbar) findViewById(R.id.home_toolbar));
         getSupportActionBar().setTitle(null);
-
-//        Log.d("DEBUG", "Launching invite act");
-//        Intent login2Intent = new Intent(this, InviteActivity.class);
-//        startActivity(login2Intent);
 
         fAuth = FirebaseAuth.getInstance();
         if(fAuth.getCurrentUser() == null)
@@ -83,9 +81,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         fragmentTransaction.add(R.id.events_fragment_container, eventFragment);
         fragmentTransaction.commit();
 
-        setFirebaseUser();
-        getUser();
-
         logout.setOnClickListener(this);
         addEvent.setOnClickListener(this);
     }
@@ -94,16 +89,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
 
-//        fUser.getToken(true)
-//                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-//                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-//                        if (task.isSuccessful()) {
-//                            String idToken = task.getResult().getToken();
-//                            // Todo: Update firebase
-//                            FirebaseDatabase.getInstance().getReference("users").child(fUser.getEmail()).child("UserToken").setValue(idToken);
-//                        }
-//                    }
-//                });
+        if (initialRun)
+        {
+            initialRun = false;
+            setFirebaseUser();
+            getUser();
+        }
     }
 
     public void setFirebaseUser()
@@ -120,7 +111,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
     public void getUser()
     {
-        String email = fUser.getEmail();
+        String email = fAuth.getCurrentUser().getEmail();
         fDatabase.child("emailsToPhones").child(Utilities.encodeKey(email)).
                 addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -147,11 +138,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                                         u.setPhoneNumber(dataSnapshot.getKey());
                                         currentUser.setUser(u);
                                         eventFragment.setData(currentUser);
-                                        Log.d("getUser", "user's name is " + currentUser.getFullName());
-                                        Log.d("getUser", "user's email is " + currentUser.getEmail());
-                                        Log.d("getUser", "user's token is " + currentUser.getToken());
-                                        Log.d("getUser", "user's invited is " + currentUser.getInvited());
-                                        Log.d("getUser", "user's hosted is " + currentUser.getHosted());
                                     }
 
                                     @Override
@@ -167,11 +153,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
                     }
                 });
-        Log.d("getUser", "user's name is " + currentUser.getFullName());
-        Log.d("getUser", "user's email is " + currentUser.getEmail());
-        Log.d("getUser", "user's token is " + currentUser.getToken());
-        Log.d("getUser", "user's invited is " + currentUser.getInvited());
-        Log.d("getUser", "user's hosted is " + currentUser.getHosted());
     }
 
     public void signOut()
@@ -188,11 +169,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 signOut();
                 break;
             case R.id.home_add_event:
-                if (currentUser == null)
-                {
-                    Toast.makeText(getApplicationContext(), "App is retrieving info", Toast.LENGTH_SHORT).show();
-                    break;
-                }
                 Intent addEventIntent = new Intent(this, AddEvent.class);
                 addEventIntent.putExtra("user", new Gson().toJson(currentUser));
                 startActivity(addEventIntent);

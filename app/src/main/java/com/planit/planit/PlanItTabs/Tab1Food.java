@@ -1,51 +1,49 @@
 package com.planit.planit.PlanItTabs;
 
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.planit.planit.LoginActivity;
-import com.planit.planit.PlanItActivity;
 import com.planit.planit.R;
-import com.planit.planit.utils.AmountUnit;
 import com.planit.planit.utils.AmountUnitPhone;
+import com.planit.planit.utils.Event;
 import com.planit.planit.utils.Item;
 
-import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.planit.planit.utils.User;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -53,31 +51,21 @@ import android.widget.AdapterView.OnItemSelectedListener;
 public class Tab1Food extends Fragment{
 
     private RecyclerView recyclerView;
-    private RecyclerView recyclerViewAmount;
+    ItemsAdapter adapter;
+
+    TextView emptyList;
+
     FirebaseAuth fAuth;
     FirebaseUser fUser;
-    DatabaseReference fDatabase;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    RecycleAdapter adapter;
-    ArrayList<Item> ItemList;
-    FirebaseListAdapter<String> myAdapter;
-    ArrayList<String> phoneNumberOfEvent;
-    ArrayList<String> namesOfPhoneNumberOfEvent;
-    Spinner areaSpinner;
+    DatabaseReference mDatabase;
+    ChildEventListener foodAndDrinksListener;
+
+    User currentUser;
+    Event currentEvent;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        final View rootView = inflater.inflate(R.layout.planit_tab1_food, container, false);
-        phoneNumberOfEvent = new ArrayList<>();
-        namesOfPhoneNumberOfEvent = new ArrayList<>();
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(llm);
-
-        ItemList = new ArrayList<>();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         //region firebase
         fAuth = FirebaseAuth.getInstance();
@@ -86,78 +74,45 @@ public class Tab1Food extends Fragment{
             startActivity(loginIntent);
             getActivity().finish();
         }
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() == null) {
-                    Intent loginIntent2 = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(loginIntent2);
-                    getActivity().finish();
-                }
-            }
-        };
         fUser = fAuth.getCurrentUser();
         if (fUser == null) {
             Intent loginIntent3 = new Intent(getActivity(), LoginActivity.class);
             startActivity(loginIntent3);
             getActivity().finish();
         }
-        fDatabase = FirebaseDatabase.getInstance().getReference();
-        //endregion
-        fDatabase.child("events").child("1234567").child("Friends").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Is better to use a List, because you don't know the size
-                // of the iterator returned by dataSnapshot.getChildren() to
-                // initialize the array
-                //final List<String> areas = new ArrayList<String>();
-                phoneNumberOfEvent.clear();
-                for (DataSnapshot areaSnapshot: dataSnapshot.getChildren()) {
-                    String phoneName = areaSnapshot.getKey().toString();//.getValue(String.class);
-                    phoneNumberOfEvent.add(phoneName);
-                }
-            }
+        foodAndDrinksListener = null;
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-            }
-        });
+        final View rootView = inflater.inflate(R.layout.planit_tab1_food, container, false);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.items_recycler_view);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        adapter = new ItemsAdapter();
+        recyclerView.setLayoutManager(llm);
+        recyclerView.setAdapter(adapter);
+        emptyList = (TextView) rootView.findViewById(R.id.list_empty);
 
 
+        Bundle extras = getArguments();
+        currentUser = new Gson().fromJson(extras.getString("user"), User.class);
+        currentEvent = new Gson().fromJson(extras.getString("event"), Event.class);
 
-
-        //region for fab
-         //TODO change
-        //DatabaseReference eventsRef = fDatabase.child("events").child(eventId).child("FoodAndDrinks");
-
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.home_add_event);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //dropdown.setOnItemSelectedListener(getContext());
-                final View inflaterView =  LayoutInflater.from(getContext()).inflate(R.layout.add_amount_unit_layout, null);
-
-                fDatabase.child("users").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("eventsData/" + currentEvent.getKey() + "/foodAndDrinks").
+                addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Is better to use a List, because you don't know the size
-                        // of the iterator returned by dataSnapshot.getChildren() to
-                        // initialize the array
-                        namesOfPhoneNumberOfEvent.clear();
-                       // final List<String> areas = new ArrayList<String>();
-
-                        for (DataSnapshot areaSnapshot: dataSnapshot.getChildren()) {
-                            if(phoneNumberOfEvent.contains(areaSnapshot.getKey())){
-                                String areaName = areaSnapshot.child("firstName").getValue(String.class) + " " + areaSnapshot.child("lastName").getValue(String.class);
-                                namesOfPhoneNumberOfEvent.add(areaName);
-                            }
-
+                        if (!dataSnapshot.exists())
+                        {
+                            // TODO stop spinner here
+                            emptyList.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
                         }
-
-
                     }
 
                     @Override
@@ -165,106 +120,186 @@ public class Tab1Food extends Fragment{
 
                     }
                 });
+
+        foodAndDrinksListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d("food listener", "item was added!");
+                Item item = dataSnapshot.getValue(Item.class);
+                item.setTitle(dataSnapshot.getKey());
+                adapter.addItem(item);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d("food listener", "item was changed!");
+                Item item = dataSnapshot.getValue(Item.class);
+                item.setTitle(dataSnapshot.getKey());
+                adapter.changeItem(item);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d("food listener", "item was removed!");
+                adapter.removeItem(dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        mDatabase.child("eventsData/" + currentEvent.getKey() + "/foodAndDrinks").
+                addChildEventListener(foodAndDrinksListener);
+
+        //endregion
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.add_item);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //dropdown.setOnItemSelectedListener(getContext());
+                final View addFoodView = LayoutInflater.from(getContext()).inflate(R.layout.add_food_item, null);
+
+                final TextView foodTitle = (TextView) addFoodView.findViewById(R.id.add_food_name);
+                final TextView foodAmount = (TextView) addFoodView.findViewById(R.id.food_amount_input);
+                final TextView foodUnit = (TextView) addFoodView.findViewById(R.id.food_unit_input);
                 final AlertDialog dialog = new AlertDialog.Builder(getContext())
-                        .setTitle("Add New Food/Drink to event")
-                        .setMessage("Amount And Units")
-                        .setView(inflaterView)
-                        .create();
-                areaSpinner = (Spinner) inflaterView.findViewById(R.id.spinner1);
-                ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, namesOfPhoneNumberOfEvent);
-                areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                areaSpinner.setAdapter(areasAdapter);//areaSpinner.setSelection(position);
-                //areaSpinner.setOnItemSelectedListener(null);
-                OnItemSelectedListener l = new OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(final AdapterView<?> aParent, final View aView,
-                                               final int aPosition, final long aRowId) {
-                        Toast.makeText(getContext(), "yayyy", Toast.LENGTH_SHORT).show();
-                        //areaSpinner.setSelection(aPosition);
-                    }
-                    @Override
-                    public void onNothingSelected(final AdapterView<?> aParent) {
-                        // TODO Auto-generated method stub
-                        Toast.makeText(getContext(), "fuckkkkkkkkkk", Toast.LENGTH_SHORT).show();
-
-                    }
-                };
-
-                //areaSpinner.setOnItemSelectedListener(l);
-                areaSpinner.setOnItemClickListener(
-                        new AdapterView.OnItemClickListener() {
+                        .setTitle("Add Food/Drink To Event")
+                        .setView(addFoodView).setPositiveButton("Add", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Toast.makeText(getContext(), "shoyyyyyyyy", Toast.LENGTH_SHORT).show();
-                                areaSpinner.setSelection(position);
+                            public void onClick(DialogInterface dialog, int which) {
+                                // leave empty, will set afterwards so dialog will not dismiss
                             }
-                        }
-                );
+                        })
+                        .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .create();
+                foodTitle.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        final String title = s.toString();
+                        if (title.isEmpty())
+                        {
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setFocusable(false);
+                            return;
+                        }
+                        mDatabase.child("eventsData/" + currentEvent.getKey() + "/foodAndDrinks/" +
+                                title).
+                                addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Item i = dataSnapshot.getValue(Item.class);
+                                        if (i != null)
+                                        {
+                                            foodTitle.setError("Item already exists.");
+                                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+                                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setFocusable(false);
+                                        }
+                                        else
+                                        {
+                                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
+                                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setFocusable(true);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
 
                 dialog.show();
 
-//                Button addButton = (Button) inflaterView.findViewById(R.id.AddButton);
-//                addButton.setOnClickListener(new View.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(View v) {
-////                        final String timeStr;
-////                        if (timePicker.getMinute() < 10) {
-////                            timeStr = String.valueOf(timePicker.getHour()) + ":0" + String.valueOf(timePicker.getMinute());
-////                        } else {
-////                            timeStr = String.valueOf(timePicker.getHour()) + ":" + String.valueOf(timePicker.getMinute());
-////
-////                        }
-////                        int day = datePicker.getDayOfMonth();
-////                        int month = datePicker.getMonth() + 1;
-////                        int year = datePicker.getYear();
-////                        final String dateStr = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
-////                        Log.i("debugging", timeStr);
-////
-////                        final TodoMessage msgObj = new TodoMessage(String.valueOf(taskEditText.getText()), timeStr, dateStr, "");
-////
-////
-////                        //second section
-////                        //save it to the firebase db
-////                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-////                        String key = database.getReference("users").child(mAuth.getCurrentUser().getUid()).push().getKey();
-////                        msgObj.setIdMsg(key);
-////                        Map<String, Object> childUpdates = new HashMap<>();
-////                        HashMap<String, String> todo = new HashMap<String, String>();
-////                        todo.put("data", msgObj.getData());
-////                        todo.put("hourCreated", msgObj.getHourCreated());
-////                        todo.put("todoHour", msgObj.getTodoDate());
-////                        todo.put("todoDate", msgObj.getTodoHour());
-////                        todo.put("idMsg", msgObj.getIdMsg());
-////
-////                        childUpdates.put(key, todo);
-////                        database.getReference("users").child(mAuth.getCurrentUser().getUid()).updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
-////                            @Override
-////                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-////                                if (databaseError == null) {
-////                                    finish();
-////                                }
-////                                todoList.add(msgObj);
-////                                adapter.notifyItemInserted(todoList.size() - 1);
-////                            }
-////                        });
-//                        dialog.dismiss();
-//                    }
-//                });
-//                Button cancelButton = (Button) inflaterView.findViewById(R.id.CancelButton);
-//                cancelButton.setOnClickListener(new View.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(View v) {
-//                        dialog.dismiss();
-//                    }
-//                });
-            }});
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setFocusable(false);
+
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(validateFood(foodAmount, foodUnit)) {
+                                    String foodTitleString = foodTitle.getText().toString();
+                                    String foodAmountString = foodAmount.getText().toString();
+                                    String foodUnitString = foodUnit.getText().toString();
+                                    addNewFood(foodTitleString, foodAmountString, foodUnitString);
+                                    dialog.dismiss();
+                                }
+                            }
+                        }
+                );
+            }
+        });
 
         return rootView;
     }
 
+    public Boolean validateFood(TextView foodAmount, TextView foodUnit)
+    {
+        if (foodAmount.getText().toString().isEmpty())
+        {
+            foodAmount.setError("Please fill amount");
+            return false;
+        }
+        if (Integer.parseInt(foodAmount.getText().toString()) == 0)
+        {
+            foodAmount.setError("Amount can't be zero");
+            return false;
+        }
+        if (foodUnit.getText().toString().isEmpty())
+        {
+            foodUnit.setText(R.string.default_unit);
+        }
+        return true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mDatabase.child("eventsData/" + currentEvent.getKey() + "/foodAndDrinks").
+                removeEventListener(foodAndDrinksListener);
+    }
+
+    public void addNewFood(String foodTitle, String foodAmount, String foodUnit)
+    {
+        Item newItem = new Item(foodTitle,Integer.parseInt(foodAmount), foodUnit, currentUser.getPhoneNumber(),
+                currentUser.getFullName());
+        Map<String, Object> childUpdates = new HashMap<>();
+        //puts the full event in events root in firebase
+        Log.d("path to DB is", "eventsData/" + currentEvent.getKey() + "/foodAndDrinks/"
+                + newItem.getTitle());
+        childUpdates.put("eventsData/" + currentEvent.getKey() + "/foodAndDrinks/"
+                + newItem.getTitle(), newItem.toFirebaseMap());
+        mDatabase.updateChildren(childUpdates);
+    }
 
     public class OnSpinnerItemClicked implements OnItemSelectedListener {
 
@@ -273,8 +308,6 @@ public class Tab1Food extends Fragment{
                                    View view, int pos, long id) {
             Toast.makeText(parent.getContext(), "Clicked : " +
                     parent.getItemAtPosition(pos).toString(), Toast.LENGTH_LONG).show();
-
-
         }
 
         @Override
@@ -282,62 +315,68 @@ public class Tab1Food extends Fragment{
             // Do nothing.
         }
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        fAuth.addAuthStateListener(mAuthListener);
-
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        try {
-
-            //fDatabase = FirebaseDatabase.getInstance().getReference();
-            fDatabase.child("events").child("1234567").child("FoodAndDrinks").addValueEventListener(
-                    new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            ItemList.clear();
-
-                            //Log.w("TodoApp", "getUser:onCancelled " + dataSnapshot.toString());
-                            //Log.w("TodoApp", "count = " + String.valueOf(dataSnapshot.getChildrenCount()) + " values " + dataSnapshot.getKey());
-                            for (DataSnapshot data : dataSnapshot.getChildren()) {
-                                String title = data.child("title").getValue().toString();
-                                ArrayList<AmountUnitPhone> p = new ArrayList<AmountUnitPhone>();
-                                for (DataSnapshot data2 : data.child("phoneNumbers").getChildren()) {
-                                    Log.w("TodoApp", "getUser:onCancelled " + data2.getValue().toString());
-                                    p.add(new AmountUnitPhone(data2.child("Amount").getValue().toString(), data2.child("Unit").getValue().toString(), data2.getKey().toString()));
-                                }
-                                Item item = new Item(title, p);//data.getValue(Item.class);
-                                ItemList.add(item);
-                            }
-                            adapter = new RecycleAdapter();
-                            recyclerView.setAdapter(adapter);
-                            adapter.notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.w("PlantIt- Tab1Food", "Problem:onCancelled", databaseError.toException());
-                        }
-                    });
-        } catch (Exception ex) {
-            String TAG = "sdsd";
-            Log.d(TAG, ex.getMessage());
-        }
-
-    }
 
     /////
-    private class RecycleAdapter extends RecyclerView.Adapter {
+    private class ItemsAdapter extends RecyclerView.Adapter {
+
+        private ArrayList<Item> itemsList;
+
+        public ItemsAdapter()
+        {
+            this.itemsList = new ArrayList<>();
+        }
+
+        public void addItem(Item item)
+        {
+            this.itemsList.add(item);
+            emptyList.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            notifyItemInserted(getItemCount());
+        }
+
+        public void changeItem(Item changedItem)
+        {
+            int indexToChange = findItem(changedItem.getTitle());
+            if (indexToChange == -1)
+            {
+                return;
+            }
+            this.itemsList.remove(indexToChange);
+            this.itemsList.add(indexToChange, changedItem);
+            notifyItemChanged(indexToChange);
+        }
+
+        public void removeItem(String removedItem)
+        {
+            int indexToRemove = findItem(removedItem);
+            if (indexToRemove == -1)
+            {
+                return;
+            }
+            Log.d("item removal", "removed item " + this.itemsList.get(indexToRemove).getTitle());
+            this.itemsList.remove(indexToRemove);
+            notifyItemRemoved(indexToRemove);
+        }
+
+        private int findItem(String title)
+        {
+            Log.d("Looking for ", title);
+            for (int i = 0; i < getItemCount(); i++)
+            {
+                if (this.itemsList.get(i).getTitle().equals(title))
+                {
+                    Log.d("Found at index", String.valueOf(i));
+                    return i;
+                }
+            }
+            return -1;
+        }
 
         @Override
         public int getItemCount() {
-            return ItemList.size();
+            return this.itemsList.size();
         }
+
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             //View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_message_item, parent, false);
@@ -350,87 +389,187 @@ public class Tab1Food extends Fragment{
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             SimpleItemViewHolder viewHolder = (SimpleItemViewHolder) holder;
-            viewHolder.position = position;
+            Item item = this.itemsList.get(position);
 
-            if (position % 2 == 0) {
-                ((SimpleItemViewHolder) holder).setBackGroundColor(Color.parseColor("#58D3F7"));
-            } else {
-                ((SimpleItemViewHolder) holder).setBackGroundColor(Color.parseColor("#F5DA81"));
+            viewHolder.foodTitle.setText(item.getTitle());
+            viewHolder.requestedBy.setText(String.format(getResources().getString(R.string.addedby),
+                    item.getRequestedByName()));
+            viewHolder.amountUnit.setText(String.format(getResources().getString(R.string.amount_and_unit),
+                    item.getNeededAmount(), item.getUnit()));
+            if (item.getRequestedByPhone().equals(currentUser.getPhoneNumber()))
+            {
+                // this item was added by this user, allow him to delete it
+                viewHolder.deleteButton.setVisibility(View.VISIBLE);
             }
-
-            Item todo = ItemList.get(position);
-
-            ((SimpleItemViewHolder) holder).todoTextView.setText(todo.getTitle());
+            if (viewHolder.wasExpanded)
+            {
+                viewHolder.expandView();
+            }
         }
 
         public final class SimpleItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            TextView todoTextView;
+            TextView foodTitle;
+            TextView requestedBy;
+            TextView amountUnit;
+            ImageButton deleteButton;
             LinearLayout expandedView;
+            boolean wasExpanded = false;
             final CardView cv;
-            public int position;
 
 
             public SimpleItemViewHolder(final CardView cv) {
                 super(cv);
-                cv.setOnClickListener(this);
                 this.cv = cv;
-                this.todoTextView = (TextView) cv.findViewById(R.id.item_text);
+                this.foodTitle = (TextView) cv.findViewById(R.id.item_title);
+                this.requestedBy = (TextView) cv.findViewById(R.id.item_requested_by);
+                this.amountUnit = (TextView) cv.findViewById(R.id.item_amount_unit);
+                this.deleteButton = (ImageButton) cv.findViewById(R.id.delete_item);
                 this.expandedView = (LinearLayout) cv.findViewById(R.id.expand_view_layout);
-
-            }
-
-            public void setBackGroundColor(int colorBG) {
-                this.cv.setBackgroundColor(colorBG);
+                this.cv.setOnClickListener(this);
+                this.deleteButton.setOnClickListener(this);
             }
 
             @Override
             public void onClick(final View view) {
+                switch (view.getId())
+                {
+                    case R.id.delete_item:
+                        deleteItem();
+                        break;
+                    default:
+                        expandView();
+                }
+            }
+
+            public void deleteItem()
+            {
+                Item item = itemsList.get(getAdapterPosition());
+                mDatabase.child("eventsData/" + currentEvent.getKey() + "/foodAndDrinks/"
+                                + item.getTitle()).setValue(null);
+            }
+
+            public void expandView()
+            {
+                boolean shouldExpand = this.expandedView.getChildCount() == 0;
+
+                if (!shouldExpand){;
+                    wasExpanded = false;
+                    this.expandedView.removeAllViews();
+                    return;
+                }
+
+                wasExpanded = true;
 
                 LayoutInflater inflater = LayoutInflater.from(getContext());
-                LinearLayout containerDestacado = (LinearLayout) cv.findViewById(R.id.expand_view_layout);
 
+                final Item item = itemsList.get(getAdapterPosition());
+                HashMap<String, AmountUnitPhone> aup = item.getQuantities();
+                if (aup == null)
+                {
+                    // no one commited for this item
+                    View inflatedLayout = inflater.inflate(R.layout.amount_unit_layout, this.cv, false);
+                    final EditText amountEditText = (EditText) inflatedLayout.findViewById(R.id.amount_layout);
+                    final TextView foodUnitLayout = (TextView) inflatedLayout.findViewById(R.id.item_unit_by_layout);
+                    final AppCompatButton updateButton = (AppCompatButton) inflatedLayout.findViewById(R.id.item_update_button);
 
+                    amountEditText.setText("0");
+                    amountEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-                Item item = (Item)ItemList.toArray()[position];
-                ArrayList<AmountUnitPhone> aup = item.getQuantities();
-                for(AmountUnitPhone a:  aup){
-                    View inflatedLayout = inflater.inflate(R.layout.amount_unit_layout, null, false);
+                    foodUnitLayout.setText(item.getUnit());
 
-                    //phone
-                    TextView phoneNum = (TextView) inflatedLayout.findViewById(R.id.item_phone);
-                    String phone = a.getPhone().toString();
+                    updateButton.setVisibility(View.VISIBLE);
+                    updateButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String amount = amountEditText.getText().toString();
+                            if (amount.isEmpty() || amount.equals("0"))
+                            {
+                                Toast.makeText(getContext(), "Amount can't be zero", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            // we know amount is numeric since the edittext input type is numeric
+                            int amountNumeric = Integer.parseInt(amount);
+                            if (item.getLeftNeeded() < amountNumeric)
+                            {
+                                Toast.makeText(getContext(), "Wow! you want to bring too much!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            item.addQuantity(currentUser.getPhoneNumber(), amountNumeric, currentUser.getFullName());
+                            mDatabase.child("eventsData/" + currentEvent.getKey() + "/foodAndDrinks/"
+                                    + item.getTitle() + "/quantities/" + currentUser.getPhoneNumber()).
+                                    setValue(new AmountUnitPhone(amountNumeric, currentUser.getFullName()));
+                        }
+                    });
+                    this.expandedView.addView(inflatedLayout);
+                    return;
+                } // aup == null if
+                if (aup.containsKey(currentUser.getPhoneNumber()))
+                {
+                    final AmountUnitPhone current = aup.get(currentUser.getPhoneNumber());
+                    View inflatedLayout = inflater.inflate(R.layout.amount_unit_layout, this.cv, false);
+                    final EditText amountEditText = (EditText) inflatedLayout.findViewById(R.id.amount_layout);
+                    TextView foodUnitLayout = (TextView) inflatedLayout.findViewById(R.id.item_unit_by_layout);
+                    AppCompatButton updateButton = (AppCompatButton) inflatedLayout.findViewById(R.id.item_update_button);
 
-                    //DatabaseReference ref = fDatabase.child("users").child(phone);
-                    //String fullname = ref.child("firstName").getKey().toString() +" "+ ref.child("lastName").toString();
-                    phoneNum.setText(phone);
+                    amountEditText.setText(Integer.toString(current.getAmount()));
+                    amountEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-                    //Amount
-                    TextInputEditText amount = (TextInputEditText) inflatedLayout.findViewById(R.id.amount_input);
-                    amount.setText(a.getAmount());
+                    foodUnitLayout.setText(item.getUnit());
 
-                    //Unit
-                    TextInputEditText unit = (TextInputEditText) inflatedLayout.findViewById(R.id.unit_input);
-                    unit.setText(a.getUnit());
-                    containerDestacado.addView(inflatedLayout);
+                    updateButton.setVisibility(View.VISIBLE);
+                    updateButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String amount = amountEditText.getText().toString();
+                            if (amount.isEmpty() || amount.equals("0"))
+                            {
+                                Toast.makeText(getContext(), "Amount can't be zero", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            // we know amount is numeric since the edittext input type is numeric
+                            int amountNumeric = Integer.parseInt(amount);
+                            Log.d("needed now", String.valueOf(item.getLeftNeeded()
+                                    + current.getAmount()));
+                            if (amountNumeric > item.getLeftNeeded() + current.getAmount())
+                            {
+                                Toast.makeText(getContext(), "Wow! you want to bring too much!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            item.addQuantity(currentUser.getPhoneNumber(), amountNumeric, currentUser.getFullName());
+                            current.setAmount(amountNumeric);
+                            mDatabase.child("eventsData/" + currentEvent.getKey() + "/foodAndDrinks/"
+                                    + item.getTitle() + "/quantities/" + currentUser.getPhoneNumber()).
+                                    setValue(new AmountUnitPhone(amountNumeric, currentUser.getFullName()));
+                        }
+                    });
+                    this.expandedView.addView(inflatedLayout);
+                } // containsKey if
+                // now handle the rest of the views, other people that are bringing this item
+                if (item.getQuantities().size() > 1)
+                {
+                    TextView alreadyGot = new TextView(getContext());
+                    alreadyGot.setText(R.string.already_got);
+                    this.expandedView.addView(alreadyGot);
                 }
+                for (Map.Entry<String, AmountUnitPhone> entry : item.getQuantities().entrySet())
+                {
+                    if (entry.getKey().equals(currentUser.getPhoneNumber()))
+                    {
+                        continue;
+                    }
+                    AmountUnitPhone currentQuantity = entry.getValue();
 
+                    View inflatedLayout = inflater.inflate(R.layout.amount_unit_layout, this.cv, false);
+                    final EditText amountEditText = (EditText) inflatedLayout.findViewById(R.id.amount_layout);
+                    TextView foodUnitLayout = (TextView) inflatedLayout.findViewById(R.id.item_unit_by_layout);
+                    amountEditText.setText(Integer.toString(currentQuantity.getAmount()));
+                    amountEditText.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.tw__transparent
+                            , null));
+                    foodUnitLayout.setText(getResources().getString(R.string.unit_from,
+                            item.getUnit(), currentQuantity.getFullname()));
 
-                boolean shouldExpand = this.expandedView.getVisibility() == View.GONE;
-
-                //ChangeBounds transition = new ChangeBounds();
-                //transition.setDuration(125);
-
-                if (shouldExpand) {
-                    this.expandedView.setVisibility(View.VISIBLE);
-                    //viewHolder.imageView_toggle.setImageResource(R.drawable.collapse_symbol);
-                } else {
-                    this.expandedView.setVisibility(View.GONE);
-                    containerDestacado.removeAllViews();
-                    //viewHolder.imageView_toggle.setImageResource(R.drawable.expand_symbol);
+                    this.expandedView.addView(inflatedLayout);
                 }
-
-                //TransitionManager.beginDelayedTransition(recyclerView);
-                this.itemView.setActivated(shouldExpand);
             }
         }
     }

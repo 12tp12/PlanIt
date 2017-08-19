@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
     <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -25,129 +24,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
+            android:maxWidth="180dp"
+            android:maxLines="1"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit ="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:text="@string/eventName"
             android:textSize="24sp"
             android:textStyle="bold"/>
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/info_card"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fillViewport="true"
         android:layout_below="@id/event_activity_toolbar">
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
-            <TextView
-                android:id="@+id/info_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/eventLocation"
-                android:textSize="24sp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"/>
-            <TextView
-                android:id="@+id/info_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/eventDate"
-                android:textSize="18sp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginBottom="4dp"/>
-            <TextView
-                android:id="@+id/info_hour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/eventHour"
-                android:textSize="18sp"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@id/info_date"
-                android:layout_marginTop="4dp"/>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-    <android.support.v4.widget.Space
-        android:id="@+id/info_spacer"
-        android:layout_below="@id/info_card"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorAccent"/>
-    <android.support.v7.widget.CardView
-        android:id="@+id/about_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/info_spacer">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:orientation="vertical"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
-            <TextView
-                android:id="@+id/about_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/about"
-                android:textSize="24sp"/>
-            <TextView
-                android:id="@+id/about_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lines="5"
-                android:maxLines="7"
-                android:scrollbars="vertical"/>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-    <android.support.v4.widget.Space
-        android:id="@+id/about_spacer"
-        android:layout_below="@id/about_card"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorAccent"/>
-    <android.support.v7.widget.CardView
-        android:id="@+id/bottom_people_planit_card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/about_spacer">
-        <LinearLayout
-            android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <android.support.v7.widget.CardView
-                android:id="@+id/people_card"
-                android:layout_width="0dp"
-                android:layout_weight="49.95"
-                android:layout_height="match_parent">
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp">
-                    <TextView
-                        android:id="@+id/planit_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/people"
-                        android:textSize="24sp"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"/>
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
-            <android.support.v4.widget.Space
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorAccent"/>
-            <android.support.v7.widget.CardView
-                android:id="@+id/planit_card"
-                android:layout_width="0dp"
-                android:layout_weight="49.95"
+                android:id="@+id/info_card"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -157,22 +57,158 @@
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp">
                     <TextView
+                        android:id="@+id/info_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/app_name"
+                        android:maxWidth="180dp"
+                        android:maxLines="1"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit ="marquee_forever"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:scrollHorizontally="true"
+                        android:text="@string/eventLocation"
                         android:textSize="24sp"
-                        android:textColor="@color/cardview_dark_background"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"/>
-                    <ImageView
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"/>
+                    <TextView
+                        android:id="@+id/info_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_media_next"
+                        android:text="@string/eventDate"
+                        android:textSize="18sp"
                         android:layout_alignParentEnd="true"
-                        android:background="@color/colorPrimary"/>
+                        android:layout_alignParentTop="true"
+                        android:layout_marginBottom="4dp"/>
+                    <TextView
+                        android:id="@+id/info_hour"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/eventHour"
+                        android:textSize="18sp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@id/info_date"
+                        android:layout_marginTop="4dp"/>
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+            <android.support.v4.widget.Space
+                android:id="@+id/info_spacer"
+                android:layout_below="@id/info_card"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorAccent"/>
+            <android.support.v7.widget.CardView
+                android:id="@+id/about_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/info_spacer">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+                    <TextView
+                        android:id="@+id/about_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about"
+                        android:textSize="24sp"/>
+                    <TextView
+                        android:id="@+id/about_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lines="5"
+                        android:maxLines="7"
+                        android:scrollbars="vertical"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <android.support.v4.widget.Space
+                android:id="@+id/about_spacer"
+                android:layout_below="@id/about_card"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorAccent"/>
+            <android.support.v7.widget.CardView
+                android:id="@+id/bottom_people_planit_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/about_spacer">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/people_card"
+                        android:layout_width="0dp"
+                        android:layout_weight="49.95"
+                        android:layout_height="match_parent"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:layout_marginBottom="4dp">
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp">
+                            <TextView
+                                android:id="@+id/planit_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/people"
+                                android:textSize="24sp"
+                                android:paddingStart="8dp"
+                                android:paddingEnd="8dp"/>
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                    <android.support.v4.widget.Space
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorAccent" />
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/planit_card"
+                        android:layout_width="0dp"
+                        android:layout_weight="49.95"
+                        android:layout_height="wrap_content"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:layout_marginBottom="4dp">
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/app_name"
+                                android:textSize="24sp"
+                                android:textColor="@color/cardview_dark_background"
+                                android:paddingStart="8dp"
+                                android:paddingEnd="8dp"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@android:drawable/ic_media_next"
+                                android:layout_alignParentEnd="true"
+                                android:background="@color/colorPrimary"/>
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+    </ScrollView>
+    <FrameLayout
+        android:id="@+id/chat_fragment_container"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

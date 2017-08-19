@@ -6,51 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:id="@+id/add_event_toolbar"
-        android:background="@color/colorPrimary"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_alignParentTop="true"
-        android:elevation="4dp"
-        android:textStyle="bold"
-        app:navigationIcon="?attr/homeAsUpIndicator"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:textColor="@android:color/white"
-            android:text="Add Event"
-            android:textSize="24sp"
-            android:paddingLeft="12dp"
-            android:textStyle="bold"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_alignParentTop="true"
-            android:elevation="4dp"/>
-    </android.support.v7.widget.Toolbar>
-
-    <ViewFlipper
-        android:id="@+id/add_event_flipper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:layout_below="@id/add_event_toolbar">
-
-        <!-- Part one of add event -->
         <RelativeLayout
             android:id="@+id/add_event_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/event_name_container"
+                android:id="@+id/event_name_edit_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/event_name_input"
+                    android:id="@+id/event_name_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/name"
@@ -60,7 +26,7 @@
             <View
                 android:id="@+id/date_seperator"
                 android:layout_width="match_parent"
-                android:layout_below="@id/event_name_container"
+                android:layout_below="@id/event_name_edit_container"
                 android:layout_height="1dp"
                 android:background="@color/colorAccent"
                 android:layout_marginTop="8dp"
@@ -68,7 +34,7 @@
 
             <TextView
                 style="@style/defaultPicker"
-                android:id="@+id/event_date_picker"
+                android:id="@+id/event_date_edit_picker"
                 android:layout_below="@id/date_seperator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,9 +42,9 @@
                 android:textColor="@android:color/darker_gray"/>
             <TextView
                 style="@style/defaultPicker"
-                android:id="@+id/event_time_picker"
+                android:id="@+id/event_time_edit_picker"
                 android:layout_below="@id/date_seperator"
-                android:layout_alignEnd="@id/event_name_container"
+                android:layout_alignEnd="@id/event_name_edit_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/hour_sample"
@@ -88,7 +54,7 @@
             <View
                 android:id="@+id/date_location_seperator"
                 android:layout_width="match_parent"
-                android:layout_below="@id/event_time_picker"
+                android:layout_below="@id/event_time_edit_picker"
                 android:layout_height="1dp"
                 android:background="@color/colorAccent"
                 android:layout_marginTop="8dp"
@@ -96,11 +62,11 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_below="@id/date_location_seperator"
-                android:id="@+id/event_location_container"
+                android:id="@+id/event_location_edit_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/event_location_input"
+                    android:id="@+id/event_location_edit_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/location"
@@ -110,7 +76,7 @@
             <View
                 android:id="@+id/about_seperator"
                 android:layout_width="match_parent"
-                android:layout_below="@id/event_location_container"
+                android:layout_below="@id/event_location_edit_container"
                 android:layout_height="1dp"
                 android:background="@color/colorAccent"
                 android:layout_marginTop="8dp"
@@ -122,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/event_about_input"
+                    android:id="@+id/event_about_edit_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/about"
@@ -130,23 +96,5 @@
                     android:gravity="top"
                     android:inputType="textMultiLine|textCapSentences"/>
             </android.support.design.widget.TextInputLayout>
-
-            <!--<android.support.v7.widget.AppCompatImageButton-->
-                <!--android:id="@+id/next_page"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@id/event_about_continer"-->
-                <!--android:layout_alignEnd="@id/about_seperator"-->
-                <!--android:src="@android:drawable/ic_media_next"/>-->
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/add_event_button"
-                android:layout_below="@id/event_about_continer"
-                style="@style/defaultButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/add"
-                android:layout_alignEnd="@id/about_seperator"
-                android:clickable="true"/>
         </RelativeLayout>
-    </ViewFlipper>
 </RelativeLayout>

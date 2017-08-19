@@ -15,11 +15,14 @@ import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.planit.planit.PlanItTabs.Tab1Food;
 import com.planit.planit.PlanItTabs.Tab2Equipment;
-import com.planit.planit.PlanItTabs.Tab3Playlist;
-import com.planit.planit.PlanItTabs.Tab4Friends;
+import com.planit.planit.utils.Event;
+import com.planit.planit.utils.User;
 
 
 public class PlanItActivity extends AppCompatActivity{
@@ -34,6 +37,9 @@ public class PlanItActivity extends AppCompatActivity{
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    User currentUser;
+    Event currentEvent;
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -44,7 +50,13 @@ public class PlanItActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_it);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.event_planit_toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
 
@@ -60,76 +72,14 @@ public class PlanItActivity extends AppCompatActivity{
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        //TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        //tabLayout.setupWithViewPager(mViewPager);
+        Bundle extras = getIntent().getExtras();
+        currentUser = new Gson().fromJson(extras.getString("user"), User.class);
+        currentEvent = new Gson().fromJson(extras.getString("event"), Event.class);
+        TextView title =(TextView) findViewById(R.id.event_name);
+        title.setText(currentEvent.getName());
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_plan_it, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.planit_tab1_food, container, false);
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-//            return rootView;
-//        }
-//    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -149,16 +99,18 @@ public class PlanItActivity extends AppCompatActivity{
             switch (position){
                 case 0:
                     Tab1Food tab1 = new Tab1Food();
+                    Bundle foodArgs = new Bundle();
+                    foodArgs.putString("user", new Gson().toJson(currentUser));
+                    foodArgs.putString("event", new Gson().toJson(currentEvent));
+                    tab1.setArguments(foodArgs);
                     return tab1;
                 case 1:
                     Tab2Equipment tab2 = new Tab2Equipment();
+                    Bundle equipArgs = new Bundle();
+                    equipArgs.putString("user", new Gson().toJson(currentUser));
+                    equipArgs.putString("event", new Gson().toJson(currentEvent));
+                    tab2.setArguments(equipArgs);
                     return tab2;
-                case 2:
-                    Tab3Playlist tab3 = new Tab3Playlist();
-                    return tab3;
-                case 3:
-                    Tab4Friends tab4 = new Tab4Friends();
-                    return tab4;
                 default:
                     return null;
             }
@@ -166,13 +118,11 @@ public class PlanItActivity extends AppCompatActivity{
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 4;
+            // Show 2 total pages.
+            return 2;
         }
-        Drawable myDrawable = ContextCompat.getDrawable(PlanItActivity.this, R.drawable.food_and_drinks); //Drawable you want to display
-        Drawable myDrawable2 = ContextCompat.getDrawable(PlanItActivity.this, R.drawable.equip);
-        Drawable myDrawable3 = ContextCompat.getDrawable(PlanItActivity.this, R.drawable.playlist);
-        Drawable myDrawable4 = ContextCompat.getDrawable(PlanItActivity.this, R.drawable.friends);
+        Drawable foodDrinksIcon = ContextCompat.getDrawable(PlanItActivity.this, R.drawable.food_and_drinks); //Drawable you want to display
+        Drawable equipmentIcon = ContextCompat.getDrawable(PlanItActivity.this, R.drawable.equip);
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
@@ -180,8 +130,8 @@ public class PlanItActivity extends AppCompatActivity{
                     //return "Food & Drinks";
                     SpannableStringBuilder sb = new SpannableStringBuilder(" "); // space added before text for convenience
 
-                    myDrawable.setBounds(0, 0, myDrawable.getIntrinsicWidth(), myDrawable.getIntrinsicHeight());
-                    ImageSpan span = new ImageSpan(myDrawable, ImageSpan.ALIGN_BASELINE);
+                    foodDrinksIcon.setBounds(0, 0, foodDrinksIcon.getIntrinsicWidth(), foodDrinksIcon.getIntrinsicHeight());
+                    ImageSpan span = new ImageSpan(foodDrinksIcon, ImageSpan.ALIGN_BASELINE);
                     sb.setSpan(span, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                     return sb;
@@ -189,26 +139,10 @@ public class PlanItActivity extends AppCompatActivity{
                     //return "Equipment";
                     SpannableStringBuilder sb2 = new SpannableStringBuilder(" "); // space added before text for convenience
 
-                    myDrawable2.setBounds(0, 0, myDrawable2.getIntrinsicWidth(), myDrawable2.getIntrinsicHeight());
-                    ImageSpan span2 = new ImageSpan(myDrawable2, ImageSpan.ALIGN_BASELINE);
+                    equipmentIcon.setBounds(0, 0, equipmentIcon.getIntrinsicWidth(), equipmentIcon.getIntrinsicHeight());
+                    ImageSpan span2 = new ImageSpan(equipmentIcon, ImageSpan.ALIGN_BASELINE);
                     sb2.setSpan(span2, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     return sb2;
-                case 2:
-                    //return "Playlist";
-                    SpannableStringBuilder sb3 = new SpannableStringBuilder("  "); // space added before text for convenience
-
-                    myDrawable3.setBounds(0, 0, myDrawable3.getIntrinsicWidth(), myDrawable3.getIntrinsicHeight());
-                    ImageSpan span3 = new ImageSpan(myDrawable3, ImageSpan.ALIGN_BASELINE);
-                    sb3.setSpan(span3, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    return sb3;
-                case 3:
-                    //return "Friends";
-                    SpannableStringBuilder sb4 = new SpannableStringBuilder("  "); // space added before text for convenience
-
-                    myDrawable4.setBounds(0, 0, myDrawable4.getIntrinsicWidth(), myDrawable4.getIntrinsicHeight());
-                    ImageSpan span4 = new ImageSpan(myDrawable4, ImageSpan.ALIGN_BASELINE);
-                    sb4.setSpan(span4, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    return sb4;
             }
             return null;
 

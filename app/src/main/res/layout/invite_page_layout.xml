@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.planit.planit.EventActivity"
+    android:animateLayoutChanges="true">
+
+    <android.support.v7.widget.Toolbar
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/event_activity_toolbar"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:elevation="4dp"
+        android:textStyle="bold"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        >
+        <TextView
+            android:id="@+id/event_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="@string/eventName"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/invited_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/contact_item"
+        android:layout_below="@id/event_activity_toolbar"/>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/invite_people"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_input_add"
+        android:tint="@color/textOnP"
+        android:elevation="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:visibility="gone"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/delete_people"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/delete"
+        android:tint="@color/textOnP"
+        android:elevation="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:visibility="gone"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/discard_selection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/discard"
+        android:tint="@color/textOnP"
+        android:elevation="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/delete_people"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"/>
+
+</RelativeLayout>

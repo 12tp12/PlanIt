@@ -1,11 +1,11 @@
 package com.planit.planit;
 
-//region android_base_imports
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
@@ -15,26 +15,27 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.ViewFlipper;
-//endregion
-//region firebase_imports
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
+import com.planit.planit.R;
 import com.planit.planit.utils.Event;
 import com.planit.planit.utils.FirebaseTables;
 import com.planit.planit.utils.User;
-//endregion
-//region java_imports
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-//endregion
 
-public class AddEvent extends AppCompatActivity implements View.OnClickListener{
+/**
+ * Created by HP on 15-Aug-17.
+ */
+
+public class EditEventActivity extends AppCompatActivity implements View.OnClickListener{
 
     // edit texts
     EditText eventName;
@@ -49,9 +50,10 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
 
-    AppCompatButton addEventButton;
+    AppCompatButton editEventButton;
 
     User currentUser;
+    Event currentEvent;
 
     //endregion
 
@@ -81,7 +83,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() == null)
                 {
-                    Intent loginIntent = new Intent(AddEvent.this, LoginActivity.class);
+                    Intent loginIntent = new Intent(EditEventActivity.this, LoginActivity.class);
                     startActivity(loginIntent);
                     finish();
                 }
@@ -103,8 +105,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
         Bundle extras = getIntent().getExtras();
 
         currentUser = new Gson().fromJson(extras.getString("user"), User.class);
-
-        Log.d("user between intents", "current users is " + currentUser.getPhoneNumber());
+        currentEvent = new Gson().fromJson(extras.getString("event"), Event.class);
 
         eventName = (EditText) findViewById(R.id.event_name_input);
         eventLocation = (EditText) findViewById(R.id.event_location_input);
@@ -112,6 +113,13 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
 
         eventDate = (TextView) findViewById(R.id.event_date_picker);
         eventTime = (TextView) findViewById(R.id.event_time_picker);
+
+        eventName.setText(currentEvent.getName());
+        eventLocation.setText(currentEvent.getLocation());
+        eventAbout.setText(currentEvent.getAbout());
+
+        eventDate.setText(currentEvent.getDate());
+        eventTime.setText(currentEvent.getTime());
 
         eventDate.setOnClickListener(this);
         eventTime.setOnClickListener(this);
@@ -137,8 +145,9 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
             }
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
 
-        addEventButton = (AppCompatButton) findViewById(R.id.add_event_button);
-        addEventButton.setOnClickListener(this);
+        editEventButton = (AppCompatButton) findViewById(R.id.add_event_button);
+        editEventButton.setOnClickListener(this);
+        editEventButton.setText(R.string.edit);
     }
 
     public boolean validate(){
@@ -188,35 +197,22 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener{
         String eventDateStr = eventDate.getText().toString();
         String eventTimeStr = eventTime.getText().toString();
 
-        writeNewEvent(eventNameStr, eventDateStr, eventTimeStr, eventLocationStr, eventAboutStr);
+        editEvent(eventNameStr, eventDateStr, eventTimeStr, eventLocationStr, eventAboutStr);
 
         finish();
-        //
     }
 
-    private void writeNewEvent(final String name, final String date, final String time,
+    private void editEvent(final String name, final String date, final String time,
                                final String location, final String about){
-        String eventKey = mDatabase.child("events").push().getKey();
+        String eventKey = currentEvent.getKey();
         Event event = new Event(name, date, time, location, about, currentUser.getPhoneNumber());
         Map<String, Object> postValues = event.toMapBaseEventInfoTable();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        //puts the full event in events root in firebase
+        // rewrites the current event with the given values
         childUpdates.put(FirebaseTables.eventsInfoTable + "/" + eventKey, postValues);
         mDatabase.updateChildren(childUpdates);
-
-        currentUser.addHostedEvent(eventKey);
-        //puts new entry in events of this user
-        childUpdates.clear();
-        childUpdates.put(FirebaseTables.usersToEvents + "/" + currentUser.getPhoneNumber() + "/hosted/" + eventKey
-                , true);
-        mDatabase.updateChildren(childUpdates);
-
-        // put entries in this event's invited/hosted
-        childUpdates.clear();
-        childUpdates.put(FirebaseTables.eventsToUsers + "/" + eventKey + "/hosted/" +
-                currentUser.getPhoneNumber(), true);
-        mDatabase.updateChildren(childUpdates);
+        currentEvent.setEvent(event);
     }
 
     @Override

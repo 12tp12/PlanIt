@@ -1,121 +1,36 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:id="@+id/expandView"
-android:orientation="vertical"
-android:gravity="center_horizontal"
-android:layout_below="@+id/item_text"
-android:paddingTop="5dp"
-    android:layoutDirection="ltr"
-    >
-<!--android:visibility="gone"-->
-<TextView
-    android:id="@+id/item_phone"
+    android:id="@+id/amount_unit_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textSize="20sp"
-    android:textStyle="bold"
-    android:gravity="center"
-    android:layout_marginStart="1dp"
-    tools:text="050-9233753"
-    />
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/lin_horizontal"
-    android:orientation="horizontal"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_centerHorizontal="true">
+        <EditText
+            android:id="@+id/amount_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/defaultText"
+            android:textSize="18sp"
+            android:text="@string/amount_example"
+            android:inputType="none"/>
 
-    >
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="0.5"
-        >
         <TextView
-            android:id="@+id/item_text_amount"
+            android:id="@+id/item_unit_by_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Amount:"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center"
-
-            android:layout_marginStart="1dp"
-            />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/Amount_container"
+            android:text="@string/unit_from"
+            style="@style/defaultText"
+            android:textSize="18sp"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/item_update_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            toRightOf="@id/item_text_amount"
-            android:layout_marginBottom="8dp"
-            android:inputType="number"
-
-            android:gravity="left"
-            >
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/amount_input"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                android:maxLength="5"
-                android:text="rrrrr"/>
-        </android.support.design.widget.TextInputLayout>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="0.5"
-        >
-        <TextView
-            android:id="@+id/item_text_unit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="Unit:"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginStart="1dp"
-            />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/unit_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:inputType="text"
-            android:gravity="left"
-
-            >
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/unit_input"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                android:maxLength="7"
-                android:text="sssssss"
-
-                />
-        </android.support.design.widget.TextInputLayout>
-    </RelativeLayout>
-
-
-</LinearLayout>
-    <Button
-        android:id="@+id/button2"
-        style="@style/defaultButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/expandView"
-        android:layout_centerInParent="true"
-        android:text="Update" />
-
-
-</LinearLayout>
+            style="@style/defaultButton"
+            android:text="@string/update"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"/>
+    </LinearLayout>

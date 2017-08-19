@@ -5,11 +5,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.planit.planit.utils.Event;
+import com.planit.planit.utils.User;
 
 import java.util.HashMap;
 
@@ -19,7 +23,8 @@ import java.util.HashMap;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private DatabaseReference mDatabase;
+    Event currentEvent;
+    User currentUser;
 
     private InviteFragment inviteFragment;
 
@@ -28,16 +33,30 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite);
 
-        Log.d("DEBUG", "IN INVITE ACTIVITY");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.event_activity_toolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        Bundle extras = getIntent().getExtras();
+        currentUser = new Gson().fromJson(extras.getString("user"), User.class);
+        currentEvent = new Gson().fromJson(extras.getString("event"), Event.class);
+
         inviteFragment = new InviteFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.contacts_fragment_container, inviteFragment);
-        fragmentTransaction.commit();
-
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        fragmentTransaction.commitNow();
+        inviteFragment.setData(currentUser, currentEvent);
 
         SearchView sView = (SearchView) findViewById(R.id.invite_search_input);
-        sView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+        sView.setIconifiedByDefault(false);
+        sView.clearFocus();
+        sView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 SearchView sv = (SearchView) v;
@@ -59,7 +78,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
+                Log.d("search debug", "called querynotify");
                 inviteFragment.onQueryNotify(newText);
                 return true;
             }
@@ -70,21 +89,12 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         inviteSelected.setOnClickListener(this);
     }
 
-    public void invite()
-    {
-        HashMap<String, Boolean> selectedContacts = inviteFragment.getSelectedContacts();
-        /* TODO get already invited and append the new selectedContacts to this hasmap,
-        *  so already invited people will still be invited.
-        */
-        mDatabase.child("events").child("1234567").child("Invited").setValue(selectedContacts);
-    }
-
     public void onClick(View view)
     {
         switch (view.getId())
         {
             case R.id.invite_selected_contacts:
-                invite();
+                inviteFragment.invite();
         }
     }
 }

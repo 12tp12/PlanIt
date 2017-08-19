@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -24,10 +25,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.planit.planit.utils.Event;
 import com.planit.planit.utils.FirebaseTables;
+import com.planit.planit.utils.Item;
 import com.planit.planit.utils.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by HP on 06-Aug-17.
@@ -35,16 +38,17 @@ import java.util.HashMap;
 
 public class EventFragment extends Fragment {
 
-    private eventsAdapter eAdapterHosted; // adapter for hosted events
-    private eventsAdapter eAdapterInvited; // adapter for invited events
+    private eventsAdapter eAdapter; // adapter for hosted events
 
-    private RecyclerView recyclerViewHosted; // recycler for hosted events
-    private RecyclerView recyclerViewInvited; // recycler for invited events
+    private RecyclerView recyclerView; // recycler for hosted events
     private User currentUser;
 
     private final ArrayList<String> eventIds = new ArrayList<>(); // will hold the event IDS
 
     private DatabaseReference mDatabase;
+
+    private final int HOST = 0;
+    private final int INVITE = 1;
 
     public EventFragment() {}
 
@@ -52,8 +56,7 @@ public class EventFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        eAdapterHosted = new eventsAdapter();
-        eAdapterInvited = new eventsAdapter();
+        eAdapter = new eventsAdapter();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -63,27 +66,20 @@ public class EventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View pView = inflater.inflate(R.layout.event_list_layout, container, false);
         // set recycler views
-        recyclerViewHosted = (RecyclerView) pView.findViewById(R.id.events_list_view_hosted);
-        recyclerViewInvited = (RecyclerView) pView.findViewById(R.id.events_list_view_invited);
+        recyclerView = (RecyclerView) pView.findViewById(R.id.events_list_view);
 
         LinearLayoutManager linearLayoutManagerHosted = new LinearLayoutManager(getContext());
-        recyclerViewHosted.setLayoutManager(linearLayoutManagerHosted);
-        LinearLayoutManager linearLayoutManagerInvited = new LinearLayoutManager(getContext());
-        recyclerViewInvited.setLayoutManager(linearLayoutManagerInvited);
+        recyclerView.setLayoutManager(linearLayoutManagerHosted);
 
-        recyclerViewHosted.setAdapter(eAdapterHosted);
-        recyclerViewInvited.setAdapter(eAdapterInvited);
+        recyclerView.setAdapter(eAdapter);
+
         return pView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
     public void setData(User user)
     {
         this.currentUser = user;
+
         mDatabase.child(FirebaseTables.eventsInfoTable).addChildEventListener(
                 new ChildEventListener() {
                     @Override
@@ -93,7 +89,9 @@ public class EventFragment extends Fragment {
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                        Event e = dataSnapshot.getValue(Event.class);
+                        e.setKey(dataSnapshot.getKey());
+                        eAdapter.replaceEvent(e);
                     }
 
                     @Override
@@ -103,37 +101,42 @@ public class EventFragment extends Fragment {
                         // so we'll go over the invited lists and delete the event's from their
                         // list.
                         mDatabase.child(FirebaseTables.eventsToUsers + "/" + eventKey).
-                        addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Event e = dataSnapshot.getValue(Event.class);
-                                // delete event id from all hosts hosted events
-                                ArrayList<String> hosted = new ArrayList<String>(e.getHosted().keySet());
-                                for (String host : hosted)
-                                {
-                                    mDatabase.child(FirebaseTables.usersToEvents + "/" + host
-                                            + "/hosted/" + eventKey).setValue(null);
-                                }
+                                addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Event e = dataSnapshot.getValue(Event.class);
+                                        // delete event id from all hosts hosted events
+                                        ArrayList<String> hosted = new ArrayList<String>(e.getHosted().keySet());
+                                        for (String host : hosted)
+                                        {
+                                            mDatabase.child(FirebaseTables.usersToEvents + "/" + host
+                                                    + "/hosted/" + eventKey).setValue(null);
+                                        }
 
-                                // delete event id from all invited's invited events
-                                if (e.getInvited() != null)
-                                {
-                                    ArrayList<String> inviteds = new ArrayList<String>(e.getInvited().keySet());
-                                    for (String invited : inviteds)
-                                    {
-                                        mDatabase.child(FirebaseTables.usersToEvents + "/" + invited
-                                                + "/invited/" + eventKey).setValue(null);
+                                        // delete event id from all invited's invited events
+                                        if (e.getInvited() != null)
+                                        {
+                                            ArrayList<String> inviteds = new ArrayList<String>(e.getInvited().keySet());
+                                            for (String invited : inviteds)
+                                            {
+                                                mDatabase.child(FirebaseTables.usersToEvents + "/" + invited
+                                                        + "/invited/" + eventKey).setValue(null);
+                                            }
+                                        }
+                                        mDatabase.child(FirebaseTables.eventsToUsers + "/" + eventKey).
+                                                setValue(null);
+                                        // if this event has lists of data, delete them
+                                        if (mDatabase.child("eventsData/" + eventKey) != null)
+                                        {
+                                            mDatabase.child("eventsData/" + eventKey).setValue(null);
+                                        }
                                     }
-                                }
-                                mDatabase.child(FirebaseTables.eventsToUsers + "/" + eventKey).
-                                        setValue(null);
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                                    }
+                                });
                     }
 
                     @Override
@@ -152,7 +155,7 @@ public class EventFragment extends Fragment {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Log.d("Child listener", "new child was added to hosted!");
-                        getEvent(dataSnapshot.getKey(), eAdapterHosted);
+                        getEvent(dataSnapshot.getKey(), HOST);
                     }
 
                     @Override
@@ -163,7 +166,7 @@ public class EventFragment extends Fragment {
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
                         Log.d("Child listener", "new child was removed from hosted!");
-                        eAdapterHosted.removeEvent(dataSnapshot.getKey());
+                        eAdapter.removeEvent(dataSnapshot.getKey());
                     }
 
                     @Override
@@ -181,18 +184,17 @@ public class EventFragment extends Fragment {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Log.d("Child listener", "new child was added to invited!");
-                        getEvent(dataSnapshot.getKey(), eAdapterInvited);
+                        getEvent(dataSnapshot.getKey(), INVITE);
                     }
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
                     }
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
                         Log.d("Child listener", "new child was removed from invited!");
-                        eAdapterInvited.removeEvent(dataSnapshot.getKey());
+                        eAdapter.removeEvent(dataSnapshot.getKey());
                     }
 
                     @Override
@@ -207,7 +209,7 @@ public class EventFragment extends Fragment {
                 });
     }
 
-    public void getEvent(String eventID, final eventsAdapter adapter)
+    public void getEvent(String eventID, final int type)
     {
         mDatabase.child("events/" + eventID).addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -217,7 +219,7 @@ public class EventFragment extends Fragment {
                         Event event = dataSnapshot.getValue(Event.class);
                         event.setKey(dataSnapshot.getKey());
                         Log.d("events retrieval", "event name is " + event.getName());
-                        adapter.addEvent(event);
+                        eAdapter.addEvent(event, type);
                     }
 
                     @Override
@@ -246,21 +248,17 @@ public class EventFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Event e = dataSnapshot.getValue(Event.class);
-                        String eventKey = dataSnapshot.getKey();
-                        String currentPhone = currentUser.getPhoneNumber();
+                        final String eventKey = dataSnapshot.getKey();
+                        final String currentPhone = currentUser.getPhoneNumber();
                         toDelete.setHosted(e.getHosted());
                         toDelete.setInvited(e.getInvited());
                         // user is host
-                        if (toDelete.getHosted().containsKey(currentPhone))
-                        {
+                        if (toDelete.getHosted().containsKey(currentPhone)) {
                             // user was only host, delete whole event
-                            if (toDelete.getHosted().size() == 1)
-                            {
+                            if (toDelete.getHosted().size() == 1) {
                                 // delete event from all databases
                                 mDatabase.child(FirebaseTables.eventsInfoTable + "/" + eventKey).setValue(null);
-                            }
-                            else
-                            {
+                            } else {
                                 // user was not only host, so delete from hosts list on both necessary tables,
                                 // usersToEvents and eventsToUsers
                                 mDatabase.child(FirebaseTables.usersToEvents + "/" + currentPhone + "/hosted/"
@@ -268,16 +266,75 @@ public class EventFragment extends Fragment {
                                 mDatabase.child(FirebaseTables.eventsToUsers + "/" + eventKey + "/hosted/"
                                         + currentPhone).setValue(null);
                             }
-                        }
-                        else if (toDelete.getInvited().containsKey(currentPhone))
-                        {
+                        } else if (toDelete.getInvited().containsKey(currentPhone)) {
                             // user is invited, delete just from both invited lists
                             mDatabase.child(FirebaseTables.usersToEvents + "/" + currentPhone + "/invited/"
                                     + eventKey).setValue(null);
                             mDatabase.child(FirebaseTables.eventsToUsers + "/" + eventKey + "/invited/"
                                     + currentPhone).setValue(null);
                         }
-                    }
+                        // remove this user from food, drinks and equipment lists
+                        // for each list, iterate each requested item's quantities.
+                        // if the user participated in this item, remove his quantity.
+                        mDatabase.child("eventsData/" + eventKey + "/foodAndDrinks").
+                                addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (!dataSnapshot.exists())
+                                        {
+                                            return;
+                                        }
+                                        Event event = dataSnapshot.getValue(Event.class);
+                                        if (event.getFoodAndDrinks() != null)
+                                        {
+                                            for (Map.Entry<String, Item> data : event.getFoodAndDrinks().entrySet())
+                                            {
+                                                Item item = data.getValue();
+                                                if (item.isUserInQuantites(currentPhone))
+                                                {
+                                                    mDatabase.child("eventsData/" + eventKey + "/foodAndDrinks/"
+                                                            + data.getKey() + "/quantities/"
+                                                            + currentPhone).setValue(null);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+                        mDatabase.child("eventsData/" + eventKey + "/equipment").
+                                addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (!dataSnapshot.exists())
+                                        {
+                                            return;
+                                        }
+                                        Event event = dataSnapshot.getValue(Event.class);
+                                        if (event.getFoodAndDrinks() != null)
+                                        {
+                                            for (Map.Entry<String, Item> data : event.getFoodAndDrinks().entrySet())
+                                            {
+                                                Item item = data.getValue();
+                                                if (item.isUserInQuantites(currentPhone))
+                                                {
+                                                    mDatabase.child("eventsData/" + eventKey + "/equipment/"
+                                                            + data.getKey() + "/quantities/"
+                                                            + currentPhone).setValue(null);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                        }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
@@ -286,9 +343,9 @@ public class EventFragment extends Fragment {
                 });
     }
 
-    private class eventsAdapter extends RecyclerView.Adapter<eventsAdapter.ViewHolder>
+    private class eventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+        public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
                                                                         View.OnLongClickListener{
             CardView card;
             TextView eName;
@@ -296,9 +353,9 @@ public class EventFragment extends Fragment {
             TextView eTime;
             TextView eLocation;
 
-            public ViewHolder(CardView view) {
+            public EventViewHolder(View view) {
                 super(view);
-                this.card = view;
+                this.card = (CardView) view.findViewById(R.id.event_card);
                 this.eName = (TextView) view.findViewById(R.id.event_name);
                 this.eDate = (TextView) view.findViewById(R.id.event_date);
                 this.eTime = (TextView) view.findViewById(R.id.event_time);
@@ -310,7 +367,16 @@ public class EventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition();
-                Event event = events.get(position);
+                int index = 0;
+                if (position <= lastHostedEvent)
+                {
+                    index = position - 1;
+                }
+                else
+                {
+                    index = position - 2;
+                }
+                Event event = events.get(index);
 
                 Log.d("clicked event", event.getName());
                 Log.d("clicked event", event.getKey());
@@ -318,6 +384,7 @@ public class EventFragment extends Fragment {
                 Intent eventIntent = new Intent(getContext(), EventActivity.class);
                 eventIntent.putExtra("user", new Gson().toJson(currentUser));
                 eventIntent.putExtra("event", new Gson().toJson(event));
+                eventIntent.putExtra("isHost", position <= lastHostedEvent);
                 startActivity(eventIntent);
             }
 
@@ -328,8 +395,18 @@ public class EventFragment extends Fragment {
                 builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        handleDeleteEvent(events.get(getAdapterPosition()));
-                        notifyItemRemoved(getAdapterPosition());
+                        int index = 0;
+                        int position = getAdapterPosition();
+                        if (position <= lastHostedEvent)
+                        {
+                            index = position - 1;
+                        }
+                        else
+                        {
+                            index = position - 2;
+                        }
+                        handleDeleteEvent(events.get(index));
+                        notifyItemRemoved(index);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -343,22 +420,86 @@ public class EventFragment extends Fragment {
             }
         }
 
+        class TitleViewHolder extends RecyclerView.ViewHolder
+        {
+            TextView title;
+            TextView subtitle;
+
+            public TitleViewHolder(View textView)
+            {
+                super(textView);
+                this.title = (TextView) textView.findViewById(R.id.recycler_view_title);
+                this.subtitle = (TextView) textView.findViewById(R.id.recycler_view_subtitle);
+            }
+        }
+
+        final int HOST_TITLE = 0;
+        final int INVITE_TITLE = 1;
+        final int EVENT = 2;
+
         ArrayList<Event> events;
+        HashMap<String, Integer> eventType;
+        int lastHostedEvent;
+        boolean noInvited;
+        boolean noHosted;
 
         public  eventsAdapter()
         {
             this.events = new ArrayList<>();
+            this.eventType = new HashMap<>();
+            this.lastHostedEvent = 0;
+            this.noInvited = true;
+            this.noHosted = true;
         }
 
-        public eventsAdapter(ArrayList<Event> events)
+        public void addEvent(Event e, int type)
         {
-            this.events = events;
+            if (type == HOST)
+            {
+                this.events.add(this.lastHostedEvent, e);
+                this.eventType.put(e.getKey(), HOST);
+                if (noHosted)
+                {
+                    notifyItemChanged(0);
+                }
+                this.noHosted = false;
+                this.lastHostedEvent++;
+                notifyItemInserted(this.lastHostedEvent);
+            }
+            else
+            {
+                this.events.add(e);
+                this.eventType.put(e.getKey(), INVITE);
+                if (noInvited)
+                {
+                    notifyItemChanged(getItemCount() - 2);
+                }
+                this.noInvited = false;
+                notifyItemInserted(getItemCount());
+            }
         }
 
-        public void addEvent(Event e)
+        public void replaceEvent(Event event)
         {
-            this.events.add(e);
-            notifyItemInserted(getItemCount());
+            String eventKey = event.getKey();
+            int index = findIndexByKey(eventKey);
+            if (index == -1)
+            {
+                // event not found
+                Log.d("edit debug", "event not found");
+                return;
+            }
+            Log.d("edit debug", "changed event " + event.getName());
+            this.events.remove(index);
+            this.events.add(index, event);
+            if (index < lastHostedEvent)
+            {
+                notifyItemChanged(index + 1);
+            }
+            else
+            {
+                notifyItemChanged(index + 2);
+            }
         }
 
         public void removeEvent(String eventKey)
@@ -370,13 +511,31 @@ public class EventFragment extends Fragment {
                 return;
             }
             this.events.remove(index);
-            notifyItemRemoved(index);
+            if (this.eventType.get(eventKey) == HOST)
+            {
+                // means this event was a hosted one
+                this.lastHostedEvent--;
+                this.eventType.remove(eventKey);
+            }
+            if (!this.eventType.containsValue(INVITE))
+            {
+                this.noInvited = true;
+                notifyItemChanged(getItemCount());
+            }
+            if (!this.eventType.containsValue(HOST))
+            {
+                this.noHosted = true;
+                notifyItemChanged(0);
+            }
+            notifyDataSetChanged();
         }
 
         public int findIndexByKey(String key)
         {
-            for (int i = 0; i < getItemCount(); i++)
+            Log.d("Looking for", "key is " + key);
+            for (int i = 0; i < this.events.size(); i++)
             {
+                Log.d("iteration", "key now is " + this.events.get(i).getKey());
                 if (this.events.get(i).getKey().equals(key))
                 {
                     return i;
@@ -386,25 +545,89 @@ public class EventFragment extends Fragment {
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            CardView cView = (CardView) LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.event_item, parent, false);
-            return new ViewHolder(cView);
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if (viewType == EVENT)
+            {
+                return new EventViewHolder(LayoutInflater.from(parent.getContext()).inflate(
+                        R.layout.event_item, parent, false));
+            }
+            else
+            {
+                return new TitleViewHolder(LayoutInflater.from(parent.getContext()).inflate(
+                        R.layout.recycler_view_header, parent, false));
+            }
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            final Event currentEvent = this.events.get(position);
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            int type = getItemViewType(position);
+            if (type == EVENT)
+            {
+                int index = 0;
+                if (position <= this.lastHostedEvent)
+                {
+                    index = position - 1;
+                }
+                else
+                {
+                    index = position - 2;
+                }
+                final Event currentEvent = this.events.get(index);
+                EventViewHolder eventView = (EventViewHolder) holder;
+                eventView.eName.setText(currentEvent.getName());
+                eventView.eDate.setText(currentEvent.getDate());
+                eventView.eTime.setText(currentEvent.getTime());
+                eventView.eLocation.setText(currentEvent.getLocation());
+            }
+            else if (type == HOST_TITLE)
+            {
+                TitleViewHolder eventView = (TitleViewHolder) holder;
+                eventView.title.setText(R.string.hosted_events);
+                eventView.subtitle.setText(R.string.hosted_events_empty);
+                if (noHosted)
+                {
+                    eventView.subtitle.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    eventView.subtitle.setVisibility(View.GONE);
+                }
+            }
+            else if (type == INVITE_TITLE)
+            {
+                TitleViewHolder eventView = (TitleViewHolder) holder;
+                eventView.title.setText(R.string.invited_events);
+                eventView.subtitle.setText(R.string.invited_events_empty);
+                if (noInvited)
+                {
+                    eventView.subtitle.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    eventView.subtitle.setVisibility(View.GONE);
+                }
+            }
+        }
 
-            holder.eName.setText(currentEvent.getName());
-            holder.eDate.setText(currentEvent.getDate());
-            holder.eTime.setText(currentEvent.getTime());
-            holder.eLocation.setText(currentEvent.getLocation());
+        @Override
+        public int getItemViewType(int position) {
+            if (position == 0)
+            {
+                return HOST_TITLE;
+            }
+            if (position == this.lastHostedEvent + 1)
+            {
+                return INVITE_TITLE;
+            }
+            else
+            {
+                return EVENT;
+            }
         }
 
         @Override
         public int getItemCount() {
-            return this.events.size();
+            return this.events.size() + 2;
         }
     }
 }
