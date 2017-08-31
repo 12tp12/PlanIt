@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:textColor="@android:color/white"
-            android:text="Add Event"
+            android:text="Add New Event"
             android:textSize="24sp"
             android:paddingLeft="12dp"
             android:textStyle="bold"
@@ -54,7 +54,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/name"
-                    android:inputType="textCapWords" />
+                    android:inputType="textCapWords"
+                    android:maxLength="22"/>
             </android.support.design.widget.TextInputLayout>
 
             <View
@@ -104,7 +105,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/location"
-                    android:inputType="textCapWords"/>
+                    android:inputType="textCapWords"
+                    android:maxLength="30"/>
             </android.support.design.widget.TextInputLayout>
 
             <View
@@ -127,6 +129,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/about"
                     android:lines="5"
+                    android:maxLines="5"
                     android:gravity="top"
                     android:inputType="textMultiLine|textCapSentences"/>
             </android.support.design.widget.TextInputLayout>

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.planit.planit.PlanItActivity">
+    tools:context="com.planit.planit.PlanItActivity"
+    android:layoutDirection="ltr">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

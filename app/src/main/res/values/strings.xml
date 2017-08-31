@@ -26,7 +26,7 @@
     <string name="alphabetENG">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="alphabetHEB">אבגדהוזחטיכלמנסעפצקרשת</string>
     <string name="time">HH:mm</string>
-    <string name="home">Home</string>
+    <string name="home">My Events</string>
     <string name="eventName">Event Name</string>
     <string name="eventLocation">Yehud</string>
     <string name="eventDate">2.6.2017</string>

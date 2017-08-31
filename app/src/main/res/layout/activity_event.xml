@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.planit.planit.EventActivity">
+    tools:context="com.planit.planit.EventActivity"
+    android:layoutDirection="ltr"
+    >
 
     <android.support.v7.widget.Toolbar
         android:orientation="vertical"
@@ -197,6 +199,51 @@
                                 android:src="@android:drawable/ic_media_next"
                                 android:layout_alignParentEnd="true"
                                 android:background="@color/colorPrimary"/>
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <!-- -->
+            <android.support.v4.widget.Space
+                android:id="@+id/counter_spacer"
+                android:layout_below="@id/bottom_people_planit_card"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorAccent"/>
+            <android.support.v7.widget.CardView
+                android:id="@+id/bottom_counter_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/counter_spacer">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/counter_card"
+                        android:layout_width="0dp"
+                        android:layout_weight="25.95"
+                        android:layout_height="match_parent"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:layout_marginBottom="4dp">
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp">
+                            <TextView
+                                android:id="@+id/counter_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Starts In"
+
+                                android:textSize="14sp"
+                                android:paddingStart="8dp"
+                                android:paddingEnd="8dp"/>
                         </RelativeLayout>
                     </android.support.v7.widget.CardView>
                 </LinearLayout>

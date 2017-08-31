@@ -4,6 +4,7 @@
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="ltr"
     tools:context="com.planit.planit.Home">
 
     <!--<include layout="@layout/toolbar"-->
@@ -28,6 +29,7 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="12dp"
             android:layout_alignParentTop="true"
             android:elevation="4dp"/>
         </android.support.v7.widget.Toolbar>

@@ -13,7 +13,8 @@ public class Tab4Friends extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.planit_tab4_friends, container, false);
-        return rootView;
+        //View rootView = inflater.inflate(R.layout.planit_tab4_friends, container, false);
+        //return rootView;
+        return null;
     }
 }

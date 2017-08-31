@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.planit.planit.EventActivity"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:layoutDirection="ltr">
 
     <android.support.v7.widget.Toolbar
         android:orientation="vertical"

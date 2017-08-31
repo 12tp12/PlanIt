@@ -12,7 +12,8 @@ public class Tab3Playlist extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.planit_tab3_playlist, container, false);
-        return rootView;
+        //View rootView = inflater.inflate(R.layout.planit_tab3_playlist, container, false);
+        //return rootView;
+    return null;
     }
 }

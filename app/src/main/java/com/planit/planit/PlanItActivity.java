@@ -58,6 +58,13 @@ public class PlanItActivity extends AppCompatActivity{
             }
         });
         setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         getSupportActionBar().setTitle(null);
 
         //setSupportActionBar((Toolbar) findViewById(R.id.planit_toolbar));
@@ -77,6 +84,8 @@ public class PlanItActivity extends AppCompatActivity{
         currentEvent = new Gson().fromJson(extras.getString("event"), Event.class);
         TextView title =(TextView) findViewById(R.id.event_name);
         title.setText(currentEvent.getName());
+
+
 
     }
 

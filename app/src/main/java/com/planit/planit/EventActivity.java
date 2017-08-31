@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
@@ -40,7 +41,8 @@ import com.planit.planit.utils.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
+import java.util.Date;
+import android.os.Handler;
 public class EventActivity extends AppCompatActivity implements View.OnClickListener{
 
     FirebaseAuth fAuth;
@@ -55,6 +57,9 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     TextView eventDate;
     TextView eventTime;
     TextView eventAbout;
+    private TextView countdown;
+    private Handler handler;
+    private Runnable runnable;
 
     CardView peopleCard;
     CardView planitCard;
@@ -167,6 +172,49 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
         peopleCard.setOnClickListener(this);
         planitCard.setOnClickListener(this);
+
+        //added
+        //added
+        countdown = (TextView) findViewById(R.id.counter_text);
+        countDownStart();
+    }
+    public void countDownStart() {
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                handler.postDelayed(this, 1000);
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(
+                            "dd/MM/yyyy hh:mm");
+// Please here set your event date//YYYY-MM-DD
+                    Date futureDate = dateFormat.parse(eventDate.getText().toString()+" "+eventTime.getText().toString());
+                    Date currentDate = new Date();
+                    if (!currentDate.after(futureDate)) {
+                        long diff = futureDate.getTime()
+                                - currentDate.getTime();
+                        long days = diff / (24 * 60 * 60 * 1000);
+                        diff -= days * (24 * 60 * 60 * 1000);
+                        long hours = diff / (60 * 60 * 1000);
+                        diff -= hours * (60 * 60 * 1000);
+                        long minutes = diff / (60 * 1000);
+                        diff -= minutes * (60 * 1000);
+                        long seconds = diff / 1000;
+                        countdown.setText("Starts In " + String.format("%02d", days)+" Days, "
+                                + String.format("%02d", hours)+" Hours, "
+                                + String.format("%02d", minutes)+" Min., "
+                                + String.format("%02d", seconds) + " Sec.");
+                    } else {
+                        countdown.setText("The event started!");
+                        //textViewGone();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        handler.postDelayed(runnable, 1 * 1000);
+
     }
 
     @Override
