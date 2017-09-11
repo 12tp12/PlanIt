@@ -8,6 +8,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -17,11 +18,9 @@ import com.planit.planit.utils.User;
 
 import java.util.HashMap;
 
-/**
- * Created by HP on 01-Aug-17.
- */
-
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener {
+
+    TextView eventTitle;
 
     Event currentEvent;
     User currentUser;
@@ -46,6 +45,9 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         Bundle extras = getIntent().getExtras();
         currentUser = new Gson().fromJson(extras.getString("user"), User.class);
         currentEvent = new Gson().fromJson(extras.getString("event"), Event.class);
+
+        eventTitle = (TextView) findViewById(R.id.event_title);
+        eventTitle.setText(currentEvent.getName());
 
         inviteFragment = new InviteFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

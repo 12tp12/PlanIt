@@ -3,13 +3,23 @@ package com.planit.planit.FireBaseService.MyFirebaseInstanceIDService;
 /**
  * Created by תומר on 7/26/2017.
  */
+import android.content.Intent;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.planit.planit.Home;
+import com.planit.planit.LoginActivity;
 import com.planit.planit.R;
 import com.google.firebase.database.DatabaseReference;
+import com.planit.planit.utils.User;
+import com.planit.planit.utils.Utilities;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG = "MyFirebaseIIDService";
@@ -25,17 +35,29 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         sendRegistrationToServer(refreshedToken);
     }
 
-    private void sendRegistrationToServer(String token) {
-//        // Add custom implementation, as needed.
-//
-//        SharedPreferenceUtils.getInstance(this).setValue(getString(R.string.firebase_cloud_messaging_token), token);
-//
-//        // To implement: Only if user is registered, i.e. UserId is available in preference, update token on server.
-//        int userId = SharedPreferenceUtils.getInstance(this).getIntValue(getString(R.string.user_id), 0);
-//        if(userId != 0){
-//            // Implement code to update registration token to server
-//        }
+    private void sendRegistrationToServer(final String token) {
+
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        if(fAuth.getCurrentUser() != null)
+        {
+            final DatabaseReference fDatabase = FirebaseDatabase.getInstance().getReference();
+            fDatabase.child("emailsToPhones").child(Utilities.encodeKey(fAuth.getCurrentUser().getEmail()))
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            fDatabase.child("users").child(dataSnapshot.getValue(String.class))
+                                    .child("token").setValue(token);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+        }
     }
+
+    
 
 	/*
 	The token may be rotated whenever:

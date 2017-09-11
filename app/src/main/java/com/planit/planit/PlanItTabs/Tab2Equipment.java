@@ -80,6 +80,7 @@ public class Tab2Equipment extends Fragment{
             startActivity(loginIntent);
             getActivity().finish();
         }
+        equipmentListener = null;
     }
 
     @Override
@@ -253,8 +254,8 @@ public class Tab2Equipment extends Fragment{
             }
         });
 
-        mDatabase.child("eventsData/" + currentEvent.getKey() + "/foodAndDrinks").
-                addChildEventListener(equipmentListener);
+        //mDatabase.child("eventsData/" + currentEvent.getKey() + "/equipment").
+        //        addChildEventListener(equipmentListener);
 
         return rootView;
     }
@@ -277,7 +278,7 @@ public class Tab2Equipment extends Fragment{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mDatabase.child("eventsData/" + currentEvent.getKey() + "/foodAndDrinks").
+        mDatabase.child("eventsData/" + currentEvent.getKey() + "/equipment").
                 removeEventListener(equipmentListener);
     }
 
@@ -297,7 +298,7 @@ public class Tab2Equipment extends Fragment{
     private class ItemsAdapter extends RecyclerView.Adapter {
 
         private ArrayList<Item> itemsList;
-        int changedIndex = -1;
+        //int changedIndex = -1;
 
         public ItemsAdapter()
         {
@@ -321,7 +322,7 @@ public class Tab2Equipment extends Fragment{
             }
             this.itemsList.remove(indexToChange);
             this.itemsList.add(indexToChange, changedItem);
-            this.changedIndex = indexToChange;
+            //this.changedIndex = indexToChange;
             notifyItemChanged(indexToChange);
         }
 
@@ -426,7 +427,8 @@ public class Tab2Equipment extends Fragment{
             {
                 boolean shouldExpand = this.expandedView.getChildCount() == 0;
 
-                if (!shouldExpand && !(wasExpanded && changedIndex == getAdapterPosition())){;
+                //&& !(wasExpanded && changedIndex == getAdapterPosition())
+                if (!shouldExpand ){;
                     wasExpanded = false;
                     this.expandedView.removeAllViews();
                     return;

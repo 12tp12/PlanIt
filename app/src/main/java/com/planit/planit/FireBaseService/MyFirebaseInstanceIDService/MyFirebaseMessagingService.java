@@ -49,8 +49,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentIntent(pendingIntent)
                 .setContentInfo(title)
-                .setLargeIcon(icon)
-                .setSmallIcon(R.mipmap.ic_launcher);
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher4))
+                .setSmallIcon(R.mipmap.ic_launcher4);
 
         try {
             String picture_url = map.get("picture_url");

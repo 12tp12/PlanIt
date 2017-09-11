@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.planit.planit">
+
 
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
@@ -38,20 +40,39 @@
         <activity
             android:name=".LoginActivity"
             android:excludeFromRecents="true"
-            android:noHistory="true" />
-        <activity android:name=".RegisterActivity" />
+            android:noHistory="true"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".RegisterActivity"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".PlanItActivity" />
+            android:name=".PlanItActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AddEvent"
-            android:parentActivityName=".Home"/>
+            android:parentActivityName=".Home"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".EventActivity"
             android:parentActivityName=".Home"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".InviteActivity"/>
-        <activity android:name=".InvitedPageActivity"/>
-        <activity android:name=".EditEventActivity"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".InviteActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".InvitedPageActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".EditEventActivity"
+            android:screenOrientation="portrait"/>
+
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher4" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
     </application>
 
 </manifest>

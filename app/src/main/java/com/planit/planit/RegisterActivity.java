@@ -19,6 +19,7 @@ import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.planit.planit.utils.User;
 import com.planit.planit.utils.Utilities;
 
@@ -111,27 +112,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        fUser.getToken(true)
-                                                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                                                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                                                        if (task.isSuccessful()) {
-                                                            String idToken = task.getResult().getToken();
                                                             User user = new User(firstName.getText().toString(),
                                                                     lastName.getText().toString(),
                                                                     Utilities.encodeKey(email.getText().toString()),
                                                                     null,
-                                                                    idToken);
+                                                                    FirebaseInstanceId.getInstance().getToken());
                                                             DBUsers.child(phoneNumber.getText().toString()).
                                                                     setValue(user.toMapUser());
                                                             DBEmailToPhones.child(Utilities.encodeKey(email.getText().toString())).
                                                                     setValue(phoneNumber.getText().toString());
-                                                            // ...
-                                                        } else {
-                                                            // Handle error -> task.getException();
-                                                        }
-                                                    }
-                                                });
-
                                     } else {
                                         Log.d(TAG, "User profile update failed");
                                     }

@@ -66,7 +66,7 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_event);
+        setContentView(R.layout.activity_edit_event);
 
         //region firebase
         mDatabase = FirebaseDatabase.getInstance().getReference();
