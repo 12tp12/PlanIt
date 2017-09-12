@@ -1,0 +1,63 @@
+const functions = require('firebase-functions');
+
+// Create and Deploy Your First Cloud Functions
+// https://firebase.google.com/docs/functions/write-firebase-functions
+
+exports.helloWorld = functions.https.onRequest((request, response) => {
+ response.send("Hello from Plan it Firebase!");
+ console.log("helloWorld function was triggered");
+});
+
+exports.SanatizePost = functions.database
+.ref('/post/{pushId}')
+.onWrite(event = {
+const post = event.data.val();
+if(post.sanitized){
+	return
+}
+console.log("sanitizing new post "+ event.params.pushId)
+post.sanitized = true;
+post.title = sanitize(post.title)
+post.body = sanitize(post.body)
+const promise = event.data.ref.set(post)
+return promise
+})
+
+function sanitize(s){
+	var sanitizeText = sanitizeText = sanitizeText.replace(/\bstupid\b/ig,"Wondarful")
+	return sanitizeText
+}
+
+//an example for cloud function where we need sequantuely promises
+exports.emailEmployeeReport = functions.database
+.ref('/employees/${eid}/reports/${rid}')
+.onWrite(event = {
+const eid = event.params.eid
+const report = event.data.val().report
+const root = event.data.ref.root
+
+//want to send a manager a report of an employee
+//gets the manager ID
+return root.child('/employees/${eid}/manager').once('value').then(snap =>{
+	const mgr_id = snap.val()
+	//look up the email address of the manager
+	const email_promise = root.child('/employees/${mgr_id}/email').once('value')
+	return email_promise
+}).then(snap =>{
+	const email = snap.val()
+	//sends the report for that email address
+	return sendReportEmail(email, report);//sends a mail to the manager
+}).catch(reason => {
+	//Handle an error
+	console.log("Error " + reason)
+})
+
+})
+
+//an example where we can parallel the promisses and the order doesnt matter
+exports.sendThanks = function.database
+.ref('/thanks/${eid1}/${eid2}')
+.onWrite(event =>{
+	const eid1 = event.params.eid1;
+	const eid2 = event.prams.eid2;
+})

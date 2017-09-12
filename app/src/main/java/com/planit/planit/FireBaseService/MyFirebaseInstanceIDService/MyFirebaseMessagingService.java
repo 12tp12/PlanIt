@@ -36,7 +36,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(String title, String body, Map<String, String> map) {
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher4);
 
         Intent intent = new Intent(this, Home.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -48,7 +48,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentIntent(pendingIntent)
-                .setContentInfo(title)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher4))
                 .setSmallIcon(R.mipmap.ic_launcher4);
 
@@ -57,7 +56,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if (picture_url != null && !"".equals(picture_url)) {
                 URL url = new URL(picture_url);
                 Bitmap bigPicture = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                notificationBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bigPicture).setSummaryText(body));
+                notificationBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(icon).setSummaryText(body));
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,0 +1,389 @@
+[debug] [2017-09-12T20:37:21.826Z] ----------------------------------------------------------------------
+[debug] [2017-09-12T20:37:21.835Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\tomer\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase deploy --only functions
+[debug] [2017-09-12T20:37:21.837Z] CLI Version:   3.10.1
+[debug] [2017-09-12T20:37:21.837Z] Platform:      win32
+[debug] [2017-09-12T20:37:21.837Z] Node Version:  v6.4.0
+[debug] [2017-09-12T20:37:21.839Z] Time:          Tue Sep 12 2017 23:37:21 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:37:21.839Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-09-12T20:37:21.892Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-09-12T20:37:21.893Z] > authorizing via signed-in user
+[debug] [2017-09-12T20:37:21.902Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/planit-d9dec  
+ Tue Sep 12 2017 23:37:21 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:37:22.958Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:37:22.963Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/planit-d9dec/tokens  
+ Tue Sep 12 2017 23:37:22 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:37:23.694Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'planit-d9dec'...
+[info] 
+[info] i  deploying functions
+[debug] [2017-09-12T20:37:25.566Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "dependencies": {
+    "firebase-admin": "~4.2.1",
+    "firebase-functions": "^0.5.7"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[info] i  runtimeconfig: ensuring necessary APIs are enabled...
+[debug] [2017-09-12T20:37:25.580Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/planit-d9dec?view=CONSUMER_VIEW  
+ Tue Sep 12 2017 23:37:25 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:37:25.581Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/planit-d9dec?view=CONSUMER_VIEW  
+ Tue Sep 12 2017 23:37:25 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:37:26.972Z] <<< HTTP RESPONSE 200
+[info] +  runtimeconfig: all necessary APIs are enabled
+[debug] [2017-09-12T20:37:27.063Z] <<< HTTP RESPONSE 200
+[info] +  functions: all necessary APIs are enabled
+[debug] [2017-09-12T20:37:27.068Z] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/planit-d9dec  
+ Tue Sep 12 2017 23:37:27 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:37:27.069Z] >>> HTTP REQUEST GET https://apikeys.googleapis.com/v1/projects/planit-d9dec/apiKeys  
+ Tue Sep 12 2017 23:37:27 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:37:28.146Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:37:28.345Z] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2017-09-12T20:37:43.106Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/planit-d9dec/configs  
+ Tue Sep 12 2017 23:37:43 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:37:43.661Z] <<< HTTP RESPONSE 200
+[info] i  functions: packaged functions (2.97 KB) for uploading
+[debug] [2017-09-12T20:37:59.450Z] >>> HTTP REQUEST GET https://www.googleapis.com/storage/v1/b/staging.planit-d9dec.appspot.com  
+ Tue Sep 12 2017 23:37:59 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:37:59.945Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:37:59.948Z] >>> HTTP REQUEST POST https://www.googleapis.com/upload/storage/v1/b/staging.planit-d9dec.appspot.com/o?uploadType=media&name=firebase-functions-source ReadStream {
+  _readableState: 
+   ReadableState {
+     objectMode: false,
+     highWaterMark: 65536,
+     buffer: BufferList { head: [Object], tail: [Object], length: 1 },
+     length: 3042,
+     pipes: null,
+     pipesCount: 0,
+     flowing: null,
+     ended: true,
+     endEmitted: false,
+     reading: false,
+     sync: false,
+     needReadable: false,
+     emittedReadable: true,
+     readableListening: false,
+     resumeScheduled: false,
+     defaultEncoding: 'utf8',
+     ranOut: false,
+     awaitDrain: 0,
+     readingMore: false,
+     decoder: null,
+     encoding: null },
+  readable: true,
+  domain: null,
+  _events: { end: [Function] },
+  _eventsCount: 1,
+  _maxListeners: undefined,
+  path: 'C:\\Users\\tomer\\AppData\\Local\\Temp\\firebase-functions-154525QMRzNNsQKOo.zip',
+  fd: 5,
+  flags: 'r',
+  mode: 438,
+  start: undefined,
+  end: undefined,
+  autoClose: true,
+  pos: undefined,
+  bytesRead: 3042 } 
+ Tue Sep 12 2017 23:37:59 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:00.771Z] <<< HTTP RESPONSE 200
+[info] +  functions: functions folder uploaded successfully
+[info] i  starting release process (may take several minutes)...
+[debug] [2017-09-12T20:38:00.805Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/projects/planit-d9dec/locations/us-central1/functions  
+ Tue Sep 12 2017 23:38:00 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:01.890Z] <<< HTTP RESPONSE 200
+[info] i  functions: updating function sendNotificationWhenEventTimeChanged...
+[debug] [2017-09-12T20:38:01.914Z] Trigger is: 
+[info] i  functions: updating function sendNotificationWhenEventDateChanged...
+[debug] [2017-09-12T20:38:01.918Z] Trigger is: 
+[info] i  functions: updating function sendNotificationWhenEventLocationChanged...
+[debug] [2017-09-12T20:38:01.930Z] Trigger is: 
+[info] i  functions: updating function sendNotificationWhenAddedFriend...
+[debug] [2017-09-12T20:38:01.946Z] Trigger is: 
+[debug] [2017-09-12T20:38:01.953Z] >>> HTTP REQUEST PUT https://cloudfunctions.googleapis.com/v1beta2/projects/planit-d9dec/locations/us-central1/functions/sendNotificationWhenEventTimeChanged { sourceArchiveUrl: 'gs://staging.planit-d9dec.appspot.com/firebase-functions-source',
+  name: 'projects/planit-d9dec/locations/us-central1/functions/sendNotificationWhenEventTimeChanged',
+  entryPoint: 'sendNotificationWhenEventTimeChanged',
+  timeout: '60s',
+  availableMemoryMb: 256,
+  eventTrigger: 
+   { resource: 'projects/_/instances/planit-d9dec/refs/events/{eventId}/time',
+     eventType: 'providers/google.firebase.database/eventTypes/ref.update' } } 
+ Tue Sep 12 2017 23:38:01 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:01.970Z] >>> HTTP REQUEST PUT https://cloudfunctions.googleapis.com/v1beta2/projects/planit-d9dec/locations/us-central1/functions/sendNotificationWhenEventDateChanged { sourceArchiveUrl: 'gs://staging.planit-d9dec.appspot.com/firebase-functions-source',
+  name: 'projects/planit-d9dec/locations/us-central1/functions/sendNotificationWhenEventDateChanged',
+  entryPoint: 'sendNotificationWhenEventDateChanged',
+  timeout: '60s',
+  availableMemoryMb: 256,
+  eventTrigger: 
+   { resource: 'projects/_/instances/planit-d9dec/refs/events/{eventId}/date',
+     eventType: 'providers/google.firebase.database/eventTypes/ref.update' } } 
+ Tue Sep 12 2017 23:38:01 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:01.977Z] >>> HTTP REQUEST PUT https://cloudfunctions.googleapis.com/v1beta2/projects/planit-d9dec/locations/us-central1/functions/sendNotificationWhenEventLocationChanged { sourceArchiveUrl: 'gs://staging.planit-d9dec.appspot.com/firebase-functions-source',
+  name: 'projects/planit-d9dec/locations/us-central1/functions/sendNotificationWhenEventLocationChanged',
+  entryPoint: 'sendNotificationWhenEventLocationChanged',
+  timeout: '60s',
+  availableMemoryMb: 256,
+  eventTrigger: 
+   { resource: 'projects/_/instances/planit-d9dec/refs/events/{eventId}/location',
+     eventType: 'providers/google.firebase.database/eventTypes/ref.update' } } 
+ Tue Sep 12 2017 23:38:01 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:01.984Z] >>> HTTP REQUEST PUT https://cloudfunctions.googleapis.com/v1beta2/projects/planit-d9dec/locations/us-central1/functions/sendNotificationWhenAddedFriend { sourceArchiveUrl: 'gs://staging.planit-d9dec.appspot.com/firebase-functions-source',
+  name: 'projects/planit-d9dec/locations/us-central1/functions/sendNotificationWhenAddedFriend',
+  entryPoint: 'sendNotificationWhenAddedFriend',
+  timeout: '60s',
+  availableMemoryMb: 256,
+  eventTrigger: 
+   { resource: 'projects/_/instances/planit-d9dec/refs/eventsToUsers/{eventId}/invited/{userId}',
+     eventType: 'providers/google.firebase.database/eventTypes/ref.create' } } 
+ Tue Sep 12 2017 23:38:01 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:02.495Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:03.038Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:03.048Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:03.051Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:03.066Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/projects/planit-d9dec/locations/us-central1/functions  
+ Tue Sep 12 2017 23:38:03 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:03.068Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:38:03 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:03.069Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:38:03 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:03.091Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:38:03 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:03.094Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:38:03 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:04.071Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:04.076Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:04.089Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:04.107Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:04.116Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:04.118Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:38:04.118Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:38:04.118Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:38:04.118Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:38:09.122Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:38:09 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:09.123Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:38:09 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:09.124Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:38:09 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:09.124Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:38:09 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:10.047Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:10.051Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:10.056Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:10.058Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:10.058Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:38:10.059Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:38:10.059Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:38:10.059Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:38:15.062Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:38:15 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:15.064Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:38:15 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:15.064Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:38:15 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:15.065Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:38:15 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:15.967Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:15.973Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:15.997Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:16.005Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:16.007Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:38:16.007Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:38:16.007Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:38:16.008Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:38:21.011Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:38:21 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:21.012Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:38:21 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:21.012Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:38:21 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:21.013Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:38:21 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:21.932Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:21.936Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:21.951Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:21.988Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:21.989Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:38:21.989Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:38:21.989Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:38:21.990Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:38:26.992Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:38:26 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:26.993Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:38:26 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:26.994Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:38:26 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:26.997Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:38:26 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:27.927Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:27.936Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:27.938Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:28.458Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:28.458Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:38:28.458Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:38:28.459Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:38:28.459Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:38:33.461Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:38:33 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:33.462Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:38:33 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:33.463Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:38:33 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:33.464Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:38:33 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:33.864Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:34.377Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:34.390Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:34.392Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:34.393Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:38:34.394Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:38:34.395Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:38:34.399Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:38:39.411Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:38:39 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:39.412Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:38:39 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:39.413Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:38:39 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:39.414Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:38:39 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:40.320Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:40.322Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:40.329Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:40.344Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:40.344Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:38:40.344Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:38:40.345Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:38:40.345Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:38:45.350Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:38:45 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:45.352Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:38:45 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:45.355Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:38:45 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:45.356Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:38:45 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:46.285Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:46.297Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:46.306Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:46.312Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:46.313Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:38:46.313Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:38:46.313Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:38:46.314Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:38:51.316Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:38:51 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:51.317Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:38:51 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:51.319Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:38:51 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:51.319Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:38:51 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:52.223Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:52.246Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:52.252Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:52.935Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:52.940Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:38:52.941Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:38:52.941Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:38:52.942Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:38:57.943Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:38:57 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:57.945Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:38:57 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:57.946Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:38:57 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:57.946Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:38:57 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:38:58.392Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:58.939Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:58.950Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:58.969Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:38:58.970Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:38:58.970Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:38:58.971Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:38:58.971Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:39:03.974Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:39:03 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:03.975Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:39:03 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:03.976Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:39:03 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:03.977Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:39:03 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:04.410Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:04.941Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:04.965Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:04.978Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:04.979Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:39:04.980Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:39:04.980Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:39:04.980Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:39:09.983Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:39:09 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:09.984Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:39:09 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:09.985Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:39:09 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:09.986Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:39:09 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:10.978Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:10.984Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:10.988Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:10.992Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:10.994Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:39:10.995Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:39:10.995Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:39:10.995Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:39:16.010Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:39:16 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:16.025Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:39:16 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:16.028Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:39:16 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:16.029Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:39:16 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:17.009Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:17.011Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:17.012Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:17.016Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:17.017Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:39:17.017Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:39:17.017Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:39:17.017Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:39:22.023Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:39:22 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:22.025Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:39:22 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:22.026Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:39:22 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:22.026Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:39:22 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:23.055Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:23.061Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:23.063Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:23.068Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:23.069Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:39:23.070Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:39:23.070Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:39:23.070Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
+[debug] [2017-09-12T20:39:28.076Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA  
+ Tue Sep 12 2017 23:39:28 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:28.080Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw  
+ Tue Sep 12 2017 23:39:28 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:28.083Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM  
+ Tue Sep 12 2017 23:39:28 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:28.084Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE  
+ Tue Sep 12 2017 23:39:28 GMT+0300 (Jerusalem Daylight Time)
+[debug] [2017-09-12T20:39:28.592Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:29.078Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:29.101Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:29.116Z] <<< HTTP RESPONSE 200
+[debug] [2017-09-12T20:39:29.117Z] [functions] operation poll: sendNotificationWhenEventTimeChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRUaW1lQ2hhbmdlZC91SkVXbmdFVVFhOA is not done.
+[debug] [2017-09-12T20:39:29.117Z] [functions] operation poll: sendNotificationWhenEventDateChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnREYXRlQ2hhbmdlZC9obDhIWVc1QmVjdw is not done.
+[debug] [2017-09-12T20:39:29.117Z] [functions] operation poll: sendNotificationWhenEventLocationChanged: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuRXZlbnRMb2NhdGlvbkNoYW5nZWQvelZBejJ0bWp1RGM is not done.
+[debug] [2017-09-12T20:39:29.118Z] [functions] operation poll: sendNotificationWhenAddedFriend: update operations/cGxhbml0LWQ5ZGVjL3VzLWNlbnRyYWwxL3NlbmROb3RpZmljYXRpb25XaGVuQWRkZWRGcmllbmQvaGJ3UGVFMGYzVEE is not done.
