@@ -32,8 +32,8 @@ The app uses 4 cloud functions for notifications:
 
 ## Authors
 
-* **Tomer Patel** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Dor Avrahami** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Tomer Patel** 
+* **Dor Avrahami** 
 
 ## License
 
